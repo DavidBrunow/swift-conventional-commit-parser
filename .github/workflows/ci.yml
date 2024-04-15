@@ -1,3 +1,8 @@
+on:
+  pull_request:
+  branches:
+    - main
+
 jobs:
-  ci-tooloig:
+  ci-tooling:
     uses: DavidBrunow/CI-Tooling/.github/workflows/macos-tools-action.yml@apple
