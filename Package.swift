@@ -1,4 +1,4 @@
-// swift-tools-version:5.7
+// swift-tools-version:5.9
 
 import Foundation
 import PackageDescription
@@ -81,16 +81,16 @@ let package = Package(
   ]
 )
 
-//let swiftSettings: [SwiftSetting] = [
-//    // -enable-bare-slash-regex becomes
-//    .enableUpcomingFeature("BareSlashRegexLiterals"),
-//    // -warn-concurrency becomes
-//    .enableUpcomingFeature("StrictConcurrency"),
-//    .unsafeFlags(["-enable-actor-data-race-checks"],
-//        .when(configuration: .debug)),
-//]
-//
-//for target in package.targets {
-//    target.swiftSettings = target.swiftSettings ?? []
-//    target.swiftSettings?.append(contentsOf: swiftSettings)
-//}
+let swiftSettings: [SwiftSetting] = [
+    // -enable-bare-slash-regex becomes
+    .enableUpcomingFeature("BareSlashRegexLiterals"),
+    // -warn-concurrency becomes
+    .enableUpcomingFeature("StrictConcurrency"),
+    .unsafeFlags(["-enable-actor-data-race-checks"],
+        .when(configuration: .debug)),
+]
+
+for target in package.targets {
+    target.swiftSettings = target.swiftSettings ?? []
+    target.swiftSettings?.append(contentsOf: swiftSettings)
+}
