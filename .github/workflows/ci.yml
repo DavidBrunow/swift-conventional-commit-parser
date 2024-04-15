@@ -2,5 +2,5 @@ on:
   pull_request:
 
 jobs:
-  ci-tooling:
+  ci_tooling:
     uses: DavidBrunow/CI-Tooling/.github/workflows/macos-tools-action.yml@apple
