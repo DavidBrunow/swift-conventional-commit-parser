@@ -4,3 +4,4 @@ on:
 jobs:
   ci_tooling:
     uses: DavidBrunow/CI-Tooling/.github/workflows/macos-tools-action.yml@apple
+    secrets: inherit
