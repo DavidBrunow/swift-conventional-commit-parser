@@ -96,7 +96,10 @@ for target in package.targets {
   if target.plugins == nil {
     target.plugins = []
   }
-  target.plugins! += [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
+
+  if ProcessInfo.processInfo.environment["CI"] != "true" {
+    target.plugins! += [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
+  }
 
   target.swiftSettings = target.swiftSettings ?? []
     target.swiftSettings?.append(contentsOf: swiftSettings)
