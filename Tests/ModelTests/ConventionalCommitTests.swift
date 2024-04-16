@@ -79,11 +79,11 @@ class ConventionalCommitTests: XCTestCase {
   func testFriendlyNamesForTypes() {
     XCTAssertEqual(
       ConventionalCommit(commit: .mockAwesomeFeatureBreakingChange)?.type.friendlyName,
-      "Feature"
+      "Breaking Change Feature"
     )
     XCTAssertEqual(
       ConventionalCommit(commit: .mockAwesomeBugfixBreakingChange)?.type.friendlyName,
-      "Bug Fix"
+      "Breaking Change Bug Fix"
     )
     XCTAssertEqual(
       ConventionalCommit(commit: .mockAwesomeFeature)?.type.friendlyName,

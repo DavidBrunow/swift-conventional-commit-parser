@@ -24,10 +24,27 @@ public struct ReleaseNotes {
     }
 
     let notes = groupedCommits.keys.sorted { lhs, rhs in
-      // TODO: Sort in a nice way.
-      lhs < rhs
+      if lhs.lowercased().contains("breaking") {
+        return true
+      } else if rhs.lowercased().contains("breaking") {
+        return false
+      } else if lhs.lowercased().contains("feature") {
+        return true
+      } else if rhs.lowercased().contains("feature") {
+        return false
+      } else if lhs.lowercased().contains("bug fix") {
+        return true
+      } else if rhs.lowercased().contains("bug fix") {
+        return false
+      } else if lhs.lowercased().contains("hotfix") {
+        return true
+      } else if rhs.lowercased().contains("hotfix") {
+        return false
+      }
+
+      return lhs < rhs
     }.map {
-      "### \($0.englishPluralized)\n" + groupedCommits[$0]!.map { "* \($0.description) (\($0.hash))" }.joined(separator: "\n")
+      "### \($0.englishPluralized)\n" + (groupedCommits[$0] ?? []).map { "* \($0.description) (\($0.hash))" }.joined(separator: "\n")
     }
 
     return """

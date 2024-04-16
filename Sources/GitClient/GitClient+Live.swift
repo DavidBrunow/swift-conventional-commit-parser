@@ -6,6 +6,7 @@ extension GitClient {
     let arguments = [
       "--no-pager",
       "log",
+      // swiftlint:disable:next force_unwrapping
       tag == nil ? "" : "\(tag!)..HEAD",
       "--no-merges",
       "--pretty=\"%h \(GitCommit.Constants.fieldSeparator) %s \(GitCommit.Constants.fieldSeparator) %b \n-@-@-@-@-@-@-@-@\n\"",
@@ -66,7 +67,7 @@ private func shell(
   }
 
   let data = pipe.fileHandleForReading.readDataToEndOfFile()
-  return String(data: data, encoding: .utf8)!.trimmingCharacters(in: .whitespacesAndNewlines)
+  return (String(data: data, encoding: .utf8) ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
 }
 
 private func mergeEnvs(localEnv: [String: String], processEnv: [String: String]) -> [String: String] {

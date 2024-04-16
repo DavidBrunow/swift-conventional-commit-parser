@@ -68,6 +68,7 @@ public struct SemanticVersion: Equatable {
   }
 
   public var tag: String {
+    // swiftlint:disable:next force_unwrapping
     "\(major).\(minor).\(patch)\(prerelease != nil ? "-\(prerelease!)" : "")"
   }
 

@@ -12,9 +12,9 @@ public struct ConventionalCommit: Equatable {
       var friendlyName: String {
         switch self {
         case .breakingFeat:
-          return "Feature"
+          return "Breaking Change Feature"
         case .breakingFix:
-          return "Bug Fix"
+          return "Breaking Change Bug Fix"
         case .feat:
           return "Feature"
         case .fix:

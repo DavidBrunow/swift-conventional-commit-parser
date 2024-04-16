@@ -4,9 +4,9 @@ import Foundation
 import PackageDescription
 
 let package = Package(
-  name: "swift-format",
+  name: "swift-conventional-commit-parser",
   platforms: [
-    .macOS("10.15")
+    .macOS("12")
   ],
   products: [
     .executable(
@@ -27,6 +27,8 @@ let package = Package(
       url: "https://github.com/pointfreeco/swift-dependencies.git",
       from: "1.0.0"
     ),
+    // Tooling
+    .package(url: "https://github.com/realm/SwiftLint", branch: "main")
   ],
   targets: [
     .target(
@@ -91,6 +93,11 @@ let swiftSettings: [SwiftSetting] = [
 ]
 
 for target in package.targets {
-    target.swiftSettings = target.swiftSettings ?? []
+  if target.plugins == nil {
+    target.plugins = []
+  }
+  target.plugins! += [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
+
+  target.swiftSettings = target.swiftSettings ?? []
     target.swiftSettings?.append(contentsOf: swiftSettings)
 }
