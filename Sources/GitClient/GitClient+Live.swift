@@ -2,6 +2,7 @@ import Foundation
 import Model
 
 extension GitClient {
+	/// No overview available.
 	public static let liveValue: GitClient = GitClient { tag in
 		let arguments = [
 			"--no-pager",
@@ -74,9 +75,7 @@ private func shell(
 
 private func mergeEnvs(localEnv: [String: String], processEnv: [String: String]) -> [String: String]
 {
-	localEnv.merging(
-		processEnv,
-		uniquingKeysWith: { _, envString -> String in
-			envString
-		})
+	localEnv.merging(processEnv) { _, envString -> String in
+		envString
+	}
 }

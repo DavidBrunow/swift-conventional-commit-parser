@@ -81,15 +81,27 @@ public struct ConventionalCommit: Equatable {
 
 		let typeWithoutScope = type.replacingOccurrences(of: scope ?? "", with: "")
 
+		// TODO: according to the spec, any type can be a breaking change. Need to
+		// handle that.
 		switch typeWithoutScope {
 		case "feat":
-			self.type = .known(.feat)
-		// TODO: Handle breaking in footer
+			if commit.body?.contains("BREAKING CHANGE:") == true
+				|| commit.body?.contains("BREAKING-CHANGE:") == true
+			{
+				self.type = .known(.breakingFeat)
+			} else {
+				self.type = .known(.feat)
+			}
 		case "feat!":
 			self.type = .known(.breakingFeat)
 		case "fix":
-			self.type = .known(.fix)
-		// TODO: Handle breaking in footer
+			if commit.body?.contains("BREAKING CHANGE:") == true
+				|| commit.body?.contains("BREAKING-CHANGE:") == true
+			{
+				self.type = .known(.breakingFix)
+			} else {
+				self.type = .known(.fix)
+			}
 		case "fix!":
 			self.type = .known(.breakingFix)
 		case "hotfix":

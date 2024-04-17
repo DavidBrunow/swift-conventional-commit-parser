@@ -13,6 +13,9 @@ public struct GitCommit: Equatable {
 		self.body = body
 	}
 
+	/// Parses a specially formatted git commit produced by git log.
+	/// - Parameter rawString: A string produces by the `git log` command using this format:
+	/// `--pretty="%h @-@-@-@-@ %s @-@-@-@-@ %b"`
 	public init?(_ rawString: String) {
 		let components = rawString.components(separatedBy: Constants.fieldSeparator)
 			.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }

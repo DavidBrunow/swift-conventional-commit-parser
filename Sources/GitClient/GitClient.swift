@@ -32,5 +32,6 @@ extension GitClient {
 }
 
 extension GitClient: DependencyKey {
+	/// No overview available.
 	public static let testValue: GitClient = .mock
 }

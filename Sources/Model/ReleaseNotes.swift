@@ -1,5 +1,5 @@
 public struct ReleaseNotes {
-	let version: SemanticVersion
+	public let version: SemanticVersion
 	let conventionalCommits: [ConventionalCommit]
 
 	var containsBreakingChange: Bool {
