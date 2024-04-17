@@ -58,6 +58,7 @@ public struct ReleaseNotes {
 
 		let dateFormatter = DateFormatter()
 		dateFormatter.dateFormat = "yyyy-MM-dd"
+		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
 
 		return """
 			## [\(version.tag)] - \(dateFormatter.string(from: date))\n

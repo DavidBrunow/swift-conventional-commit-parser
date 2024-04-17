@@ -21,7 +21,7 @@ class ReleaseNotesTests: XCTestCase {
 					]
 				).markdown,
 				"""
-				## [1.1.0] - 1969-12-31
+				## [1.1.0] - 1970-01-01
 
 				### Features
 				* Awesome feature (abcdef)
@@ -52,7 +52,7 @@ class ReleaseNotesTests: XCTestCase {
 					]
 				).markdown,
 				"""
-				## [1.0.0] - 1969-12-31
+				## [1.0.0] - 1970-01-01
 
 				### Breaking Change Features
 				* Awesome feature (abcdef)
@@ -83,7 +83,7 @@ class ReleaseNotesTests: XCTestCase {
 					]
 				).markdown,
 				"""
-				## [1.0.0] - 1969-12-31
+				## [1.0.0] - 1970-01-01
 
 				### Breaking Change Bug Fixes
 				* Awesome bugfix (abcdef)
@@ -121,7 +121,7 @@ class ReleaseNotesTests: XCTestCase {
 				{
 				  "version" : "1.0.0",
 				  "containsBreakingChange" : false,
-				  "releaseNotes" : "## [1.0.0] - 1969-12-31\\n\\n### Features\\n* Awesome feature (abcdef)\\n\\n### Chores\\n* Change the \\\"total\\\" field (abcdef)"
+				  "releaseNotes" : "## [1.0.0] - 1970-01-01\\n\\n### Features\\n* Awesome feature (abcdef)\\n\\n### Chores\\n* Change the \\\"total\\\" field (abcdef)"
 				}
 				"""
 
