@@ -59,7 +59,9 @@ let package = Package(
 		),
 		.target(
 			name: "Model",
-			dependencies: []
+			dependencies: [
+				.product(name: "Dependencies", package: "swift-dependencies")
+			]
 		),
 		.testTarget(
 			name: "ModelTests",

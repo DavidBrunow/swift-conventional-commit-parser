@@ -1,6 +1,11 @@
+import Dependencies
+import Foundation
+
 public struct ReleaseNotes {
 	public let version: SemanticVersion
 	let conventionalCommits: [ConventionalCommit]
+
+	@Dependency(\.date.now) var date
 
 	var containsBreakingChange: Bool {
 		conventionalCommits.contains { $0.isBreaking }
@@ -51,8 +56,11 @@ public struct ReleaseNotes {
 				}.joined(separator: "\n")
 		}
 
+		let dateFormatter = DateFormatter()
+		dateFormatter.dateFormat = "yyyy-MM-dd"
+
 		return """
-			## \(version.tag)\n
+			## [\(version.tag)] - \(dateFormatter.string(from: date))\n
 			\(notes.joined(separator: "\n\n").replacingOccurrences(of: "\"", with: "\\\""))
 			"""
 	}

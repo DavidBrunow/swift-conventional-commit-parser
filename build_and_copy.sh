@@ -11,8 +11,10 @@ defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
 
 rm -rf .build
 
-swift build -c release --arch arm64
-swift build -c release --arch x86_64
+# CI=true will disable things in the package that only help users interacting
+# with the code, like linting plugins.
+CI=true swift build -c release --arch arm64
+CI=true swift build -c release --arch x86_64
 
 # Enable all the macros to run on CI
 defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool NO
