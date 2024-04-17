@@ -5,12 +5,13 @@ import ArgumentParser
 /// subcommand.
 @main
 struct SwiftConventionalCommitParserCommand: AsyncParsableCommand {
-  static var configuration = CommandConfiguration(
-    commandName: "swift-conventional-commit-parser",
-    abstract: "Parses conventional commits (https://www.conventionalcommits.org/en/v1.0.0)",
-    subcommands: [
-      ParseCommand.self,
-    ],
-    defaultSubcommand: ParseCommand.self
-  )
+	static var configuration = CommandConfiguration(
+		commandName: "swift-conventional-commit-parser",
+		abstract:
+			"Parses conventional commits (https://www.conventionalcommits.org/en/v1.0.0)",
+		subcommands: [
+			ParseCommand.self
+		],
+		defaultSubcommand: ParseCommand.self
+	)
 }
