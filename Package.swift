@@ -17,6 +17,10 @@ let package = Package(
 			name: "SwiftConventionalCommitParser",
 			targets: ["SwiftConventionalCommitParser"]
 		),
+		.plugin(
+			name: "SwiftFormatLintBuildToolPlugin",
+			targets: ["SwiftFormatLintBuildToolPlugin"]
+		),
 	],
 	dependencies: [
 		.package(
@@ -32,6 +36,13 @@ let package = Package(
 		.package(url: "https://github.com/realm/SwiftLint", branch: "main"),
 	],
 	targets: [
+		.plugin(
+			name: "SwiftFormatLintBuildToolPlugin",
+			capability: .buildTool(),
+			dependencies: [
+				.product(name: "swift-format", package: "swift-format")
+			]
+		),
 		.target(
 			name: "GitClient",
 			dependencies: [
@@ -101,6 +112,7 @@ for target in package.targets {
 	}
 
 	if ProcessInfo.processInfo.environment["CI"] != "true" {
+		target.plugins! += [.plugin(name: "SwiftFormatLintBuildToolPlugin")]
 		target.plugins! += [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
 	}
 
