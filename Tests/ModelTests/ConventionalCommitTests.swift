@@ -10,6 +10,7 @@ class ConventionalCommitTests: XCTestCase {
 			ConventionalCommit(
 				description: "Awesome feature",
 				hash: "abcdef",
+				isBreaking: false,
 				scope: nil,
 				type: .known(.feat)
 			)
@@ -20,6 +21,7 @@ class ConventionalCommitTests: XCTestCase {
 			ConventionalCommit(
 				description: "Awesome feature",
 				hash: "abcdef",
+				isBreaking: false,
 				scope: "api",
 				type: .known(.feat)
 			)
@@ -30,6 +32,7 @@ class ConventionalCommitTests: XCTestCase {
 			ConventionalCommit(
 				description: "Awesome bugfix",
 				hash: "abcdef",
+				isBreaking: false,
 				scope: nil,
 				type: .known(.fix)
 			)
@@ -40,6 +43,7 @@ class ConventionalCommitTests: XCTestCase {
 			ConventionalCommit(
 				description: "Awesome bugfix",
 				hash: "abcdef",
+				isBreaking: false,
 				scope: nil,
 				type: .known(.fix)
 			)
@@ -50,6 +54,7 @@ class ConventionalCommitTests: XCTestCase {
 			ConventionalCommit(
 				description: "Awesome chore",
 				hash: "abcdef",
+				isBreaking: false,
 				scope: nil,
 				type: .unknown("chore")
 			)
@@ -60,8 +65,9 @@ class ConventionalCommitTests: XCTestCase {
 			ConventionalCommit(
 				description: "Awesome feature",
 				hash: "abcdef",
+				isBreaking: true,
 				scope: nil,
-				type: .known(.breakingFeat)
+				type: .known(.feat)
 			)
 		)
 
@@ -70,8 +76,9 @@ class ConventionalCommitTests: XCTestCase {
 			ConventionalCommit(
 				description: "Awesome bugfix",
 				hash: "abcdef",
+				isBreaking: true,
 				scope: nil,
-				type: .known(.breakingFix)
+				type: .known(.fix)
 			)
 		)
 	}
@@ -80,12 +87,12 @@ class ConventionalCommitTests: XCTestCase {
 		XCTAssertEqual(
 			ConventionalCommit(commit: .mockAwesomeFeatureBreakingChange)?.type
 				.friendlyName,
-			"Breaking Change Feature"
+			"Feature"
 		)
 		XCTAssertEqual(
 			ConventionalCommit(commit: .mockAwesomeBugfixBreakingChange)?.type
 				.friendlyName,
-			"Breaking Change Bug Fix"
+			"Bug Fix"
 		)
 		XCTAssertEqual(
 			ConventionalCommit(commit: .mockAwesomeFeature)?.type.friendlyName,

@@ -1,11 +1,16 @@
 import Foundation
 
-/// https://semver.org
+/// A semantic version as defined by https://semver.org.
 public struct SemanticVersion: Equatable {
+	/// Different ways that one version can be incremented to another version.
 	public enum BumpType {
+		/// A semantic version bump of the first number.
 		case major
+		/// A semantic version bump of the second number.
 		case minor
+		/// A semantic version bump of the third number.
 		case patch
+		/// No change to the semantic version.
 		case none
 	}
 
@@ -14,6 +19,15 @@ public struct SemanticVersion: Equatable {
 	let patch: Int
 	let prerelease: String?
 
+	/// Initializes a `SemanticVersion`. This initializer is generally used in situations like testing or
+	/// previews, where you have a specific semantic version you want to use without mucking around with
+	/// parsing.
+	/// - Parameters:
+	///   - major: The first number in the semantic version.
+	///   - minor: The second number in the semantic version.
+	///   - patch: The third number in the semantic version.
+	///   - prerelease: Prerelease information that is in the version.
+	@_disfavoredOverload
 	public init(
 		major: Int,
 		minor: Int,
@@ -26,6 +40,10 @@ public struct SemanticVersion: Equatable {
 		self.prerelease = prerelease
 	}
 
+	/// Initializes a `SemanticVersion` from a git tag. Initialization fails if a semantic version cannot be
+	/// parsed from the tag.
+	/// - Parameter tag: A tag returned from git. Must be in a format that meets the semver standard
+	/// in order to parse successfully.
 	public init?(tag: String) {
 		let tagWithoutPrerelease: String
 
@@ -74,11 +92,16 @@ public struct SemanticVersion: Equatable {
 		self.patch = patch
 	}
 
+	/// The string representation of this semantic version.
 	public var tag: String {
 		// swiftlint:disable:next force_unwrapping
 		"\(major).\(minor).\(patch)\(prerelease != nil ? "-\(prerelease!)" : "")"
 	}
 
+	/// Increases a semantic version by the provided bump type.
+	/// - Parameter bumpType: A `BumpType` that indicates how a semantic version should be
+	/// increased.
+	/// - Returns: A new instance of `SemanticVersion` with the version bump applied.
 	public func bump(_ bumpType: BumpType) -> Self {
 		switch bumpType {
 		case .major:
@@ -106,6 +129,7 @@ public struct SemanticVersion: Equatable {
 }
 
 extension SemanticVersion: Comparable {
+	/// No overview available.
 	public static func < (lhs: SemanticVersion, rhs: SemanticVersion) -> Bool {
 		if lhs.major != rhs.major {
 			return lhs.major < rhs.major

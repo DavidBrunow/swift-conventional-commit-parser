@@ -14,7 +14,7 @@ public struct Parser {
 			$0 < $1
 		}
 
-		let commitsSinceLastTag = gitClient.log(semanticVersions.last?.tag)
+		let commitsSinceLastTag = gitClient.log(toTag: semanticVersions.last?.tag)
 
 		let conventionalCommits = commitsSinceLastTag.compactMap {
 			ConventionalCommit(commit: $0)

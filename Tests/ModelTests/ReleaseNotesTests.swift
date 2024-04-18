@@ -54,8 +54,8 @@ class ReleaseNotesTests: XCTestCase {
 				"""
 				## [1.0.0] - 1970-01-01
 
-				### Breaking Change Features
-				* Awesome feature (abcdef)
+				### Features
+				* [**BREAKING CHANGE**] Awesome feature (abcdef)
 
 				### Chores
 				* Awesome chore (abcdef)
@@ -85,8 +85,8 @@ class ReleaseNotesTests: XCTestCase {
 				"""
 				## [1.0.0] - 1970-01-01
 
-				### Breaking Change Bug Fixes
-				* Awesome bugfix (abcdef)
+				### Bug Fixes
+				* [**BREAKING CHANGE**] Awesome bugfix (abcdef)
 
 				### Chores
 				* Awesome chore (abcdef)

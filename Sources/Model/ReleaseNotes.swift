@@ -30,11 +30,7 @@ public struct ReleaseNotes {
 		}
 
 		let notes = groupedCommits.keys.sorted { lhs, rhs in
-			if lhs.lowercased().contains("breaking") {
-				return true
-			} else if rhs.lowercased().contains("breaking") {
-				return false
-			} else if lhs.lowercased().contains("feature") {
+			if lhs.lowercased().contains("feature") {
 				return true
 			} else if rhs.lowercased().contains("feature") {
 				return false
@@ -52,7 +48,7 @@ public struct ReleaseNotes {
 		}.map {
 			"### \($0.englishPluralized)\n"
 				+ (groupedCommits[$0] ?? []).map {
-					"* \($0.description) (\($0.hash))"
+					"* \($0.isBreaking ? "[**BREAKING CHANGE**] " : "")\($0.description) (\($0.hash))"
 				}.joined(separator: "\n")
 		}
 

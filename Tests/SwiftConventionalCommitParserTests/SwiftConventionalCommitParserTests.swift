@@ -231,7 +231,7 @@ class SwiftConventionalCommitParserTests: XCTestCase {
 		}
 	}
 
-	func testParseNextVersionNoTagsSingleHotfixNonsensicalBreakingChangeCommit() throws {
+	func testParseNextVersionNoTagsSingleHotfixBreakingChangeCommit() throws {
 		try withDependencies {
 			$0[GitClient.self] = GitClient { _ in
 				[
@@ -245,12 +245,12 @@ class SwiftConventionalCommitParserTests: XCTestCase {
 				try Parser.releaseNotes(
 					strictInterpretationOfConventionalCommits: false
 				).version,
-				SemanticVersion(major: 0, minor: 0, patch: 0)
+				SemanticVersion(major: 1, minor: 0, patch: 0)
 			)
 		}
 	}
 
-	func testParseNextVersionNoTagsSingleHotfixNonsensicalBreakingChangeCommitStrict() throws {
+	func testParseNextVersionNoTagsSingleHotfixBreakingChangeCommitStrict() throws {
 		try withDependencies {
 			$0[GitClient.self] = GitClient { _ in
 				[
@@ -264,7 +264,7 @@ class SwiftConventionalCommitParserTests: XCTestCase {
 				try Parser.releaseNotes(
 					strictInterpretationOfConventionalCommits: false
 				).version,
-				SemanticVersion(major: 0, minor: 0, patch: 0)
+				SemanticVersion(major: 1, minor: 0, patch: 0)
 			)
 		}
 	}

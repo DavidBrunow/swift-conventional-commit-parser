@@ -1,20 +1,16 @@
 import Foundation
 
+/// A conventional commit as defined by https://www.conventionalcommits.org/en/v1.0.0.
 public struct ConventionalCommit: Equatable {
 	public enum CommitType: Equatable {
+		/// Commit types that are known by this tool.
 		public enum Known: String {
-			case breakingFeat
-			case breakingFix
 			case feat
 			case fix
 			case hotfix
 
 			var friendlyName: String {
 				switch self {
-				case .breakingFeat:
-					return "Breaking Change Feature"
-				case .breakingFix:
-					return "Breaking Change Bug Fix"
 				case .feat:
 					return "Feature"
 				case .fix:
@@ -28,6 +24,7 @@ public struct ConventionalCommit: Equatable {
 		case known(Known)
 		case unknown(String)
 
+		/// A user friendly name for the commit type.
 		public var friendlyName: String {
 			switch self {
 			case let .known(value):
@@ -37,26 +34,47 @@ public struct ConventionalCommit: Equatable {
 			}
 		}
 	}
-	public var description: String
-	public var hash: String
-	public var isBreaking: Bool {
-		type == .known(.breakingFeat) || type == .known(.breakingFix)
-	}
-	public var scope: String?
-	public var type: CommitType
 
+	/// A description of the change that was made in this conventional commit.
+	public let description: String
+
+	/// The hash of the git commit used to create this conventional commit.
+	public let hash: String
+
+	/// A flag representing whether this conventional commit indicates there is a breaking change.
+	public let isBreaking: Bool
+
+	/// The scope of the conventional commit.
+	public let scope: String?
+
+	/// The type of conventional commit.
+	public let type: CommitType
+
+	/// Initializes a `ConventionalCommit`. This initializer is generally used in situations like testing or
+	/// previews, where you have a specific conventional commit you want to use without mucking around
+	/// with parsing.
+	/// - Parameters:
+	///   - description: The description to be used for the conventional commit.
+	///   - hash: The hash of the git commit.
+	///   - scope: The scope of the conventional commit.
+	///   - type: The type of the conventional commit.
 	public init(
 		description: String,
 		hash: String,
+		isBreaking: Bool,
 		scope: String?,
 		type: CommitType
 	) {
 		self.description = description
 		self.hash = hash
+		self.isBreaking = isBreaking
 		self.scope = scope
 		self.type = type
 	}
 
+	/// Initializes a `ConventionalCommit` from a `GitCommit`. Initialization will fail if the
+	/// `GitCommit` does not meet the conventional commit standard.
+	/// - Parameter commit: A `GitCommit` that represent a commit from git.
 	public init?(commit: GitCommit) {
 		guard let colonIndex = commit.subject.firstIndex(of: ":") else {
 			return nil
@@ -85,36 +103,34 @@ public struct ConventionalCommit: Equatable {
 		// handle that.
 		switch typeWithoutScope {
 		case "feat":
-			if commit.body?.contains("BREAKING CHANGE:") == true
-				|| commit.body?.contains("BREAKING-CHANGE:") == true
-			{
-				self.type = .known(.breakingFeat)
-			} else {
-				self.type = .known(.feat)
-			}
+			self.type = .known(.feat)
 		case "feat!":
-			self.type = .known(.breakingFeat)
+			self.type = .known(.feat)
 		case "fix":
-			if commit.body?.contains("BREAKING CHANGE:") == true
-				|| commit.body?.contains("BREAKING-CHANGE:") == true
-			{
-				self.type = .known(.breakingFix)
-			} else {
-				self.type = .known(.fix)
-			}
+			self.type = .known(.fix)
 		case "fix!":
-			self.type = .known(.breakingFix)
+			self.type = .known(.fix)
 		case "hotfix":
 			self.type = .known(.hotfix)
 		default:
 			self.type = .unknown(typeWithoutScope)
 		}
 
+		if commit.body?.contains("BREAKING CHANGE:") == true
+			|| commit.body?.contains("BREAKING-CHANGE:") == true
+			|| typeWithoutScope.suffix(1) == "!"
+		{
+			self.isBreaking = true
+		} else {
+			self.isBreaking = false
+		}
+
 		self.description = String(
 			commit.subject.suffix(from: commit.subject.index(after: colonIndex))
 		).trimmingCharacters(in: .whitespacesAndNewlines)
 		self.hash = commit.hash
-		self.scope = scope?.replacingOccurrences(of: "(", with: "").replacingOccurrences(
-			of: ")", with: "")
+		self.scope = scope?
+			.replacingOccurrences(of: "(", with: "")
+			.replacingOccurrences(of: ")", with: "")
 	}
 }
