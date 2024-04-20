@@ -17,10 +17,6 @@ let package = Package(
 			name: "SwiftConventionalCommitParser",
 			targets: ["SwiftConventionalCommitParser"]
 		),
-		.plugin(
-			name: "SwiftFormatLintBuildToolPlugin",
-			targets: ["SwiftFormatLintBuildToolPlugin"]
-		),
 	],
 	dependencies: [
 		.package(
@@ -101,6 +97,12 @@ if ProcessInfo.processInfo.environment["CI"] != "true" {
     // Local Tooling
     .package(url: "https://github.com/apple/swift-format", from: "510.0.0"),
     .package(url: "https://github.com/realm/SwiftLint", branch: "main"),
+  ]
+  package.products += [
+    .plugin(
+      name: "SwiftFormatLintBuildToolPlugin",
+      targets: ["SwiftFormatLintBuildToolPlugin"]
+    ),
   ]
   package.targets += [
     .plugin(
