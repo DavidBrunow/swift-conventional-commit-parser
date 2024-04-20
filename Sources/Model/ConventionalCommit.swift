@@ -1,6 +1,6 @@
 import Foundation
 
-/// A conventional commit as defined by https://www.conventionalcommits.org/en/v1.0.0.
+/// A conventional commit as defined by https://www.conventionalcommits.org/en/v1.0.0/#specification.
 public struct ConventionalCommit: Equatable {
 	public enum CommitType: Equatable {
 		/// Commit types that are known by this tool.
@@ -99,8 +99,6 @@ public struct ConventionalCommit: Equatable {
 
 		let typeWithoutScope = type.replacingOccurrences(of: scope ?? "", with: "")
 
-		// TODO: according to the spec, any type can be a breaking change. Need to
-		// handle that.
 		switch typeWithoutScope {
 		case "feat":
 			self.type = .known(.feat)
@@ -113,7 +111,8 @@ public struct ConventionalCommit: Equatable {
 		case "hotfix":
 			self.type = .known(.hotfix)
 		default:
-			self.type = .unknown(typeWithoutScope)
+			self.type = .unknown(
+				typeWithoutScope.replacingOccurrences(of: "!", with: ""))
 		}
 
 		if commit.body?.contains("BREAKING CHANGE:") == true

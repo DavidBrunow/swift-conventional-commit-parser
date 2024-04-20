@@ -2,7 +2,7 @@ import ArgumentParser
 import Dependencies
 import GitClient
 import SwiftConventionalCommitParser
-
+// TODO: Help information for using this command.
 struct ParseCommand: AsyncParsableCommand {
 	@Flag(
 		help:
@@ -14,7 +14,10 @@ struct ParseCommand: AsyncParsableCommand {
 		try withDependencies {
 			$0[GitClient.self] = .liveValue
 		} operation: {
+			@Dependency(GitClient.self) var gitClient
+
 			let releaseNotes = try Parser.releaseNotes(
+				gitClient: gitClient,
 				strictInterpretationOfConventionalCommits: strict
 			)
 

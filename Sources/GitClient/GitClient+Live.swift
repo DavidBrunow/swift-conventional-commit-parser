@@ -10,7 +10,7 @@ extension GitClient {
 			// swiftlint:disable:next force_unwrapping
 			tag == nil ? "" : "\(tag!)..HEAD",
 			"--no-merges",
-			"--pretty=\"%h \(GitCommit.Constants.fieldSeparator) %s \(GitCommit.Constants.fieldSeparator) %b \n-@-@-@-@-@-@-@-@\n\"",
+			"--pretty=\"%h \(GitCommit.ParsingConstants.fieldSeparator) %s \(GitCommit.ParsingConstants.fieldSeparator) %b \n-@-@-@-@-@-@-@-@\n\"",
 		]
 		let log = shell(
 			command: "git",

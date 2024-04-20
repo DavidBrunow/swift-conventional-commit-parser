@@ -74,12 +74,14 @@ class ReleaseNotesTests: XCTestCase {
 					conventionalCommits: [
 						try XCTUnwrap(
 							ConventionalCommit(
-								commit: .mockAwesomeChore)),
+								commit: .mockAwesomeChore)
+						),
 						try XCTUnwrap(
 							ConventionalCommit(
 								commit:
 									.mockAwesomeBugfixBreakingChange
-							)),
+							)
+						),
 					]
 				).markdown,
 				"""
@@ -107,7 +109,7 @@ class ReleaseNotesTests: XCTestCase {
 							commit: try XCTUnwrap(
 								GitCommit(
 									"""
-									abcdef \(GitCommit.Constants.fieldSeparator) chore: Change the "total" field
+									abcdef \(GitCommit.ParsingConstants.fieldSeparator) chore: Change the "total" field
 									"""
 								)
 							)

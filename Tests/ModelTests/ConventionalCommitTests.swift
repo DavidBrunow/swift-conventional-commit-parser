@@ -81,6 +81,17 @@ class ConventionalCommitTests: XCTestCase {
 				type: .known(.fix)
 			)
 		)
+
+		XCTAssertEqual(
+			ConventionalCommit(commit: .mockUnknownTypeBreakingChange),
+			ConventionalCommit(
+				description: "Awesome turtles",
+				hash: "abcdef",
+				isBreaking: true,
+				scope: nil,
+				type: .unknown("turtles")
+			)
+		)
 	}
 
 	func testFriendlyNamesForTypes() {

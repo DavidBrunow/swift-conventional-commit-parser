@@ -9,6 +9,7 @@ struct SwiftConventionalCommitParserCommand: AsyncParsableCommand {
 		commandName: "swift-conventional-commit-parser",
 		abstract:
 			"Parses conventional commits (https://www.conventionalcommits.org/en/v1.0.0)",
+		version: "0.0.0",
 		subcommands: [
 			ParseCommand.self
 		],

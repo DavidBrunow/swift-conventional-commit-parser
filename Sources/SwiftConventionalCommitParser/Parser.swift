@@ -2,12 +2,16 @@ import Dependencies
 import GitClient
 import Model
 
+/// Parses commits provided by a `GitClient`.
 public struct Parser {
+	/// Generates release notes from commits provided by a `GitClient`.
+	/// - Parameter gitClient: A `GitClient` used for interacting with git.
+	/// - Parameter strictInterpretationOfConventionalCommits: Whether to follow the Conventional Commit standard strictly or not.
+	/// Defaults to false, which makes `fix:` commits minor version bumps and adds the `hotfix:` commit for patch version bumps.
 	public static func releaseNotes(
+		gitClient: GitClient,
 		strictInterpretationOfConventionalCommits: Bool
 	) throws -> ReleaseNotes {
-		@Dependency(GitClient.self) var gitClient
-
 		let tags = gitClient.tag()
 
 		let semanticVersions = tags.compactMap { SemanticVersion(tag: $0) }.sorted {

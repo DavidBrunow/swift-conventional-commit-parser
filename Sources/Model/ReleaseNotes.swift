@@ -1,7 +1,9 @@
 import Dependencies
 import Foundation
 
+/// Information related to release notes.
 public struct ReleaseNotes {
+	/// The semantic version for the release notes.
 	public let version: SemanticVersion
 	let conventionalCommits: [ConventionalCommit]
 
@@ -11,6 +13,11 @@ public struct ReleaseNotes {
 		conventionalCommits.contains { $0.isBreaking }
 	}
 
+	/// Initializes a `ReleaseNotes`.
+	/// - Parameters:
+	///   - version: The semantic version for the release notes.
+	///   - conventionalCommits: The conventional commits that need to be
+	///   described in the release notes.
 	public init(
 		version: SemanticVersion,
 		conventionalCommits: [ConventionalCommit]
@@ -62,6 +69,16 @@ public struct ReleaseNotes {
 			"""
 	}
 
+	/// JSON that represents release notes, including the version, whether it
+	/// contains breaking changes, and release notes in Markdown. Here is an
+	/// example:
+	/// ```json
+	/// {
+	///   "version" : "1.2.0",
+	///   "containsBreakingChange" : false,
+	///   "releaseNotes" : "## [1.2.0] - 2024-04-19\\n\\n### Features\\n* Awesome feature (abcdef)\\n\\n### Chores\\n* Change the \\\"total\\\" field (abcdef)"
+	/// }
+	/// ```
 	public var json: String {
 		"""
 		{
