@@ -31,9 +31,6 @@ let package = Package(
 			url: "https://github.com/pointfreeco/swift-dependencies.git",
 			from: "1.0.0"
 		),
-		// Tooling
-		.package(url: "https://github.com/apple/swift-format", from: "510.0.0"),
-		.package(url: "https://github.com/realm/SwiftLint", branch: "main"),
 	],
 	targets: [
 		.plugin(
@@ -105,6 +102,14 @@ let swiftSettings: [SwiftSetting] = [
 		["-enable-actor-data-race-checks"],
 		.when(configuration: .debug)),
 ]
+
+if ProcessInfo.processInfo.environment["CI"] != "true" {
+  package.dependencies += [
+    // Local Tooling
+    .package(url: "https://github.com/apple/swift-format", from: "510.0.0"),
+    .package(url: "https://github.com/realm/SwiftLint", branch: "main"),
+  ]
+}
 
 for target in package.targets {
 	guard target.type != .plugin else { continue }
