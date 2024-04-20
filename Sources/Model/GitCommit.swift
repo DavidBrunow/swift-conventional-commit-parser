@@ -84,19 +84,19 @@ public struct GitCommit: Equatable {
 		/// Mock git commit that is a `fix:` conventional commit.
 		public static let mockAwesomeBugfix = Self(
 			hash: "abcdef",
-			subject: "fix: Awesome bugfix"
+			subject: "fix: Awesome bug fix"
 		)
 
 		/// Mock git commit that is a `fix!:` conventional commit.
 		public static let mockAwesomeBugfixBreakingChange = Self(
 			hash: "abcdef",
-			subject: "fix!: Awesome bugfix"
+			subject: "fix!: Awesome bug fix"
 		)
 
 		/// Mock git commit that is a `Fix:` conventional commit.
 		public static let mockAwesomeBugfixWithDifferentCapitalization = Self(
 			hash: "abcdef",
-			subject: "Fix: Awesome bugfix"
+			subject: "Fix: Awesome bug fix"
 		)
 
 		/// Mock git commit that is a `chore:` conventional commit.

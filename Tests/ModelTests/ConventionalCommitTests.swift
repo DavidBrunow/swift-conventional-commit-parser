@@ -30,7 +30,7 @@ class ConventionalCommitTests: XCTestCase {
 		XCTAssertEqual(
 			ConventionalCommit(commit: .mockAwesomeBugfix),
 			ConventionalCommit(
-				description: "Awesome bugfix",
+				description: "Awesome bug fix",
 				hash: "abcdef",
 				isBreaking: false,
 				scope: nil,
@@ -41,7 +41,7 @@ class ConventionalCommitTests: XCTestCase {
 		XCTAssertEqual(
 			ConventionalCommit(commit: .mockAwesomeBugfixWithDifferentCapitalization),
 			ConventionalCommit(
-				description: "Awesome bugfix",
+				description: "Awesome bug fix",
 				hash: "abcdef",
 				isBreaking: false,
 				scope: nil,
@@ -74,7 +74,7 @@ class ConventionalCommitTests: XCTestCase {
 		XCTAssertEqual(
 			ConventionalCommit(commit: .mockAwesomeBugfixBreakingChange),
 			ConventionalCommit(
-				description: "Awesome bugfix",
+				description: "Awesome bug fix",
 				hash: "abcdef",
 				isBreaking: true,
 				scope: nil,

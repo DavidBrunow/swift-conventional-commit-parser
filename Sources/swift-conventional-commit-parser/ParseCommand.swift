@@ -2,7 +2,10 @@ import ArgumentParser
 import Dependencies
 import GitClient
 import SwiftConventionalCommitParser
+
 // TODO: Help information for using this command.
+// TODO: Add parameter for error message when no commits found. Or should this
+// just link to helpful information all the time?
 struct ParseCommand: AsyncParsableCommand {
 	@Flag(
 		help:

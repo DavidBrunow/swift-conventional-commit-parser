@@ -14,10 +14,19 @@ class ReleaseNotesTests: XCTestCase {
 					conventionalCommits: [
 						try XCTUnwrap(
 							ConventionalCommit(
-								commit: .mockAwesomeChore)),
+								commit: .mockAwesomeChore
+							)
+						),
 						try XCTUnwrap(
 							ConventionalCommit(
-								commit: .mockAwesomeFeature)),
+								commit: .mockAwesomeFeature
+							)
+						),
+						try XCTUnwrap(
+							ConventionalCommit(
+								commit: .mockAwesomeHotfix
+							)
+						),
 					]
 				).markdown,
 				"""
@@ -25,6 +34,9 @@ class ReleaseNotesTests: XCTestCase {
 
 				### Features
 				* Awesome feature (abcdef)
+
+				### Hotfixes
+				* Awesome hotfix (abcdef)
 
 				### Chores
 				* Awesome chore (abcdef)
@@ -74,7 +86,8 @@ class ReleaseNotesTests: XCTestCase {
 					conventionalCommits: [
 						try XCTUnwrap(
 							ConventionalCommit(
-								commit: .mockAwesomeChore)
+								commit: .mockAwesomeChore
+							)
 						),
 						try XCTUnwrap(
 							ConventionalCommit(
@@ -88,7 +101,113 @@ class ReleaseNotesTests: XCTestCase {
 				## [1.0.0] - 1970-01-01
 
 				### Bug Fixes
-				* [**BREAKING CHANGE**] Awesome bugfix (abcdef)
+				* [**BREAKING CHANGE**] Awesome bug fix (abcdef)
+
+				### Chores
+				* Awesome chore (abcdef)
+				"""
+			)
+		}
+	}
+
+	func testReleaseNotesWithCommitTypeThatDoesNotNeedPluralization() throws {
+		try withDependencies {
+			$0.date.now = Date(timeIntervalSince1970: 0)
+		} operation: {
+			XCTAssertEqual(
+				ReleaseNotes(
+					version: SemanticVersion(major: 1, minor: 0, patch: 0),
+					conventionalCommits: [
+						try XCTUnwrap(
+							ConventionalCommit(
+								commit: .mockAwesomeChore
+							)
+						),
+						try XCTUnwrap(
+							ConventionalCommit(
+								commit:
+									GitCommit(
+										hash: "abcdef",
+										subject:
+											"docs: Improve public api documentation"
+									)
+							)
+						),
+					]
+				).markdown,
+				"""
+				## [1.0.0] - 1970-01-01
+
+				### Chores
+				* Awesome chore (abcdef)
+
+				### Docs
+				* Improve public api documentation (abcdef)
+				"""
+			)
+		}
+	}
+
+	func testReleaseNotesOrderWithChoreBeforeHotfix() throws {
+		try withDependencies {
+			$0.date.now = Date(timeIntervalSince1970: 0)
+		} operation: {
+			XCTAssertEqual(
+				ReleaseNotes(
+					version: SemanticVersion(major: 1, minor: 0, patch: 0),
+					conventionalCommits: [
+						try XCTUnwrap(
+							ConventionalCommit(
+								commit: .mockAwesomeChore
+							)
+						),
+						try XCTUnwrap(
+							ConventionalCommit(
+								commit:
+									.mockAwesomeHotfix
+							)
+						),
+					]
+				).markdown,
+				"""
+				## [1.0.0] - 1970-01-01
+
+				### Hotfixes
+				* Awesome hotfix (abcdef)
+
+				### Chores
+				* Awesome chore (abcdef)
+				"""
+			)
+		}
+	}
+
+	func testReleaseNotesOrderWithChoreBeforeBugFix() throws {
+		try withDependencies {
+			$0.date.now = Date(timeIntervalSince1970: 0)
+		} operation: {
+			XCTAssertEqual(
+				ReleaseNotes(
+					version: SemanticVersion(major: 1, minor: 0, patch: 0),
+					conventionalCommits: [
+						try XCTUnwrap(
+							ConventionalCommit(
+								commit: .mockAwesomeChore
+							)
+						),
+						try XCTUnwrap(
+							ConventionalCommit(
+								commit:
+									.mockAwesomeBugfix
+							)
+						),
+					]
+				).markdown,
+				"""
+				## [1.0.0] - 1970-01-01
+
+				### Bug Fixes
+				* Awesome bug fix (abcdef)
 
 				### Chores
 				* Awesome chore (abcdef)
