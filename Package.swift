@@ -33,13 +33,6 @@ let package = Package(
 		),
 	],
 	targets: [
-		.plugin(
-			name: "SwiftFormatLintBuildToolPlugin",
-			capability: .buildTool(),
-			dependencies: [
-				.product(name: "swift-format", package: "swift-format")
-			]
-		),
 		.target(
 			name: "GitClient",
 			dependencies: [
@@ -108,6 +101,15 @@ if ProcessInfo.processInfo.environment["CI"] != "true" {
     // Local Tooling
     .package(url: "https://github.com/apple/swift-format", from: "510.0.0"),
     .package(url: "https://github.com/realm/SwiftLint", branch: "main"),
+  ]
+  package.targets += [
+    .plugin(
+      name: "SwiftFormatLintBuildToolPlugin",
+      capability: .buildTool(),
+      dependencies: [
+        .product(name: "swift-format", package: "swift-format")
+      ]
+    ),
   ]
 }
 
