@@ -1,0 +1,10 @@
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  ci_tooling:
+    uses: DavidBrunow/CI-Tooling/.github/workflows/macos-tools-release-action.yml@apple
+    permissions:
+      contents: write
