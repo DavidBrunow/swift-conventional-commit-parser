@@ -242,7 +242,7 @@ class ReleaseNotesTests: XCTestCase {
 				{
 				  "version" : "1.0.0",
 				  "containsBreakingChange" : false,
-				  "releaseNotes" : "## [1.0.0] - 1970-01-01\\\\n\\\\n### Features\\\\n* Awesome feature (abcdef)\\\\n\\\\n### Chores\\\\n* Change the \\\"total\\\" field (abcdef)"
+				  "releaseNotes" : "## [1.0.0] - 1970-01-01\\n\\n### Features\\n* Awesome feature (abcdef)\\n\\n### Chores\\n* Change the \\\"total\\\" field (abcdef)"
 				}
 				"""
 

@@ -84,7 +84,7 @@ public struct ReleaseNotes {
 		{
 		  "version" : "\(version.tag)",
 		  "containsBreakingChange" : \(containsBreakingChange),
-		  "releaseNotes" : "\(markdown.replacingOccurrences(of: "\n", with: "\\\\n"))"
+		  "releaseNotes" : "\(markdown.replacingOccurrences(of: "\n", with: "\\n"))"
 		}
 		"""
 	}
