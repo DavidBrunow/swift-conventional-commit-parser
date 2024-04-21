@@ -1,0 +1,8 @@
+on:
+  pull_request:
+
+jobs:
+  ci_tooling:
+    uses: DavidBrunow/CI-Tooling/.github/workflows/macos-tools-pull-request-action.yml@apple
+    permissions:
+      pull-requests: write
