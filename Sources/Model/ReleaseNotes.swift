@@ -5,7 +5,9 @@ import Foundation
 public struct ReleaseNotes {
 	/// The semantic version for the release notes.
 	public let version: SemanticVersion
+	let bumpType: SemanticVersion.BumpType
 	let conventionalCommits: [ConventionalCommit]
+	let hideCommitHashes: Bool
 
 	@Dependency(\.date.now) var date
 
@@ -20,10 +22,14 @@ public struct ReleaseNotes {
 	///   described in the release notes.
 	public init(
 		version: SemanticVersion,
-		conventionalCommits: [ConventionalCommit]
+		bumpType: SemanticVersion.BumpType,
+		conventionalCommits: [ConventionalCommit],
+		hideCommitHashes: Bool = false
 	) {
 		self.version = version
+		self.bumpType = bumpType
 		self.conventionalCommits = conventionalCommits
+		self.hideCommitHashes = hideCommitHashes
 	}
 
 	var markdown: String {
@@ -55,7 +61,7 @@ public struct ReleaseNotes {
 		}.map {
 			"### \($0.englishPluralized)\n"
 				+ (groupedCommits[$0] ?? []).map {
-					"* \($0.isBreaking ? "[**BREAKING CHANGE**] " : "")\($0.description) (\($0.hash))"
+					"* \($0.isBreaking ? "[**BREAKING CHANGE**] " : "")\($0.description)\(hideCommitHashes ? "" : " (" + $0.hash + ")")"
 				}.joined(separator: "\n")
 		}
 
@@ -69,22 +75,22 @@ public struct ReleaseNotes {
 			"""
 	}
 
-	/// JSON that represents release notes, including the version, whether it
-	/// contains breaking changes, and release notes in Markdown. Here is an
+	/// JSON that represents release notes, including the version, the type of
+	/// version bump (major, minor, patch, or none), and release notes in Markdown. Here is an
 	/// example:
 	/// ```json
 	/// {
 	///   "version" : "1.2.0",
-	///   "containsBreakingChange" : false,
+	///   "bumpType" : "minor",
 	///   "releaseNotes" : "## [1.2.0] - 2024-04-19\\n\\n### Features\\n* Awesome feature (abcdef)\\n\\n### Chores\\n* Change the \\\"total\\\" field (abcdef)"
 	/// }
 	/// ```
 	public var json: String {
 		"""
 		{
-		  "version" : "\(version.tag)",
-		  "containsBreakingChange" : \(containsBreakingChange),
-		  "releaseNotes" : "\(markdown.replacingOccurrences(of: "\n", with: "\\n"))"
+		  "bumpType" : "\(bumpType)",
+		  "releaseNotes" : "\(markdown.replacingOccurrences(of: "\n", with: "\\n"))",
+		  "version" : "\(version.tag)"
 		}
 		"""
 	}

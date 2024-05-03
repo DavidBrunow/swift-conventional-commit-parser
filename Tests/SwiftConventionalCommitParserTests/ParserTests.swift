@@ -38,6 +38,92 @@ class ParserTests: XCTestCase {
 		}
 	}
 
+	func testParseNextVersionNoTagsNoLogsPullRequest() throws {
+		XCTAssertThrowsError(
+			try Parser.releaseNotes(
+				gitClient: GitClient { _ in
+					[]
+				} tag: {
+					[]
+				},
+				targetBranch: "main",
+				strictInterpretationOfConventionalCommits: false
+			).version
+		) {
+			XCTAssertEqual(
+				($0 as? LocalizedError)?.errorDescription, "No formatted commits"
+			)
+		}
+	}
+
+	func testParseNextVersionNoTagsNoLogsStrictPullRequest() throws {
+		XCTAssertThrowsError(
+			try Parser.releaseNotes(
+				gitClient: GitClient { _ in
+					[]
+				} tag: {
+					[]
+				},
+				targetBranch: "main",
+				strictInterpretationOfConventionalCommits: true
+			).version
+		) {
+			XCTAssertEqual(
+				($0 as? LocalizedError)?.errorDescription, "No formatted commits"
+			)
+		}
+	}
+
+	func testParseNextVersionNoTagsNoLogsOnBranchPullRequest() throws {
+		XCTAssertThrowsError(
+			try Parser.releaseNotes(
+				gitClient: GitClient { logType in
+					switch logType {
+					case .branch:
+						return []
+					case .tag:
+						return [
+							.mockAwesomeChore
+						]
+					}
+				} tag: {
+					[]
+				},
+				targetBranch: "main",
+				strictInterpretationOfConventionalCommits: false
+			).version
+		) {
+			XCTAssertEqual(
+				($0 as? LocalizedError)?.errorDescription, "No formatted commits"
+			)
+		}
+	}
+
+	func testParseNextVersionNoTagsNoLogsOnBranchStrictPullRequest() throws {
+		XCTAssertThrowsError(
+			try Parser.releaseNotes(
+				gitClient: GitClient { logType in
+					switch logType {
+					case .branch:
+						return []
+					case .tag:
+						return [
+							.mockAwesomeChore
+						]
+					}
+				} tag: {
+					[]
+				},
+				targetBranch: "main",
+				strictInterpretationOfConventionalCommits: true
+			).version
+		) {
+			XCTAssertEqual(
+				($0 as? LocalizedError)?.errorDescription, "No formatted commits"
+			)
+		}
+	}
+
 	func testParseNextVersionNoTagsSingleFeatCommit() throws {
 		XCTAssertEqual(
 			try Parser.releaseNotes(
@@ -64,6 +150,40 @@ class ParserTests: XCTestCase {
 				} tag: {
 					[]
 				},
+				strictInterpretationOfConventionalCommits: true
+			).version,
+			SemanticVersion(major: 0, minor: 1, patch: 0)
+		)
+	}
+
+	func testParseNextVersionNoTagsSingleFeatCommitPullRequest() throws {
+		XCTAssertEqual(
+			try Parser.releaseNotes(
+				gitClient: GitClient { _ in
+					[
+						.mockAwesomeFeature
+					]
+				} tag: {
+					[]
+				},
+				targetBranch: "main",
+				strictInterpretationOfConventionalCommits: false
+			).version,
+			SemanticVersion(major: 0, minor: 1, patch: 0)
+		)
+	}
+
+	func testParseNextVersionNoTagsSingleFeatCommitStrictPullRequest() throws {
+		XCTAssertEqual(
+			try Parser.releaseNotes(
+				gitClient: GitClient { _ in
+					[
+						.mockAwesomeFeature
+					]
+				} tag: {
+					[]
+				},
+				targetBranch: "main",
 				strictInterpretationOfConventionalCommits: true
 			).version,
 			SemanticVersion(major: 0, minor: 1, patch: 0)

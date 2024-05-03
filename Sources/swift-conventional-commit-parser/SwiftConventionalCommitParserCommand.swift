@@ -10,8 +10,7 @@ struct SwiftConventionalCommitParserCommand: AsyncParsableCommand {
 		abstract:
 			"Parses conventional commits (https://www.conventionalcommits.org/en/v1.0.0)",
 		discussion: """
-			Swift Conventional Commit Parser makes use of the following open source
-			projects:
+			Swift Conventional Commit Parser uses the following open source projects:
 
 			- [Swift Argument Parser](https://github.com/apple/swift-argument-parser)
 			- [Swift Dependencies](https://github.com/pointfreeco/swift-dependencies)
@@ -20,8 +19,9 @@ struct SwiftConventionalCommitParserCommand: AsyncParsableCommand {
 			""",
 		version: "0.0.0",
 		subcommands: [
-			ParseCommand.self
-		],
-		defaultSubcommand: ParseCommand.self
+			MergeRequestCommand.self,
+			PullRequestCommand.self,
+			ReleaseCommand.self,
+		]
 	)
 }

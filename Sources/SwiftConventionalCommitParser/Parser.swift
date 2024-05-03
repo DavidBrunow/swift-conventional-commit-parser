@@ -11,6 +11,8 @@ public struct Parser {
 	/// Defaults to false, which makes `fix:` commits minor version bumps and adds the `hotfix:` commit for patch version bumps.
 	public static func releaseNotes(
 		gitClient: GitClient,
+		targetBranch: String? = nil,
+		hideCommitHashes: Bool = false,
 		strictInterpretationOfConventionalCommits: Bool,
 		noFormattedCommitsErrorMessage: String = "No formatted commits"
 	) throws -> ReleaseNotes {
@@ -20,10 +22,26 @@ public struct Parser {
 			$0 < $1
 		}
 
-		let commitsSinceLastTag = gitClient.log(toTag: semanticVersions.last?.tag)
+		if let targetBranch {
+			let commitsSinceLastBranch = gitClient.commitsSinceBranch(
+				targetBranch: targetBranch)
+			let conventionalCommitsSinceLastBranch = commitsSinceLastBranch.compactMap {
+				ConventionalCommit(commit: $0)
+			}
+			//      print("Conventional commits since last branch: \(conventionalCommitsSinceLastBranch)")
+			if conventionalCommitsSinceLastBranch.count == 0 {
+				throw ParserError.noFormattedCommits(noFormattedCommitsErrorMessage)
+			}
+		}
+
+		let commitsSinceLastTag = gitClient.commitsSinceTag(semanticVersions.last?.tag)
 
 		let conventionalCommits = commitsSinceLastTag.compactMap {
 			ConventionalCommit(commit: $0)
+		}
+
+		guard conventionalCommits.count > 0 else {
+			throw ParserError.noFormattedCommits(noFormattedCommitsErrorMessage)
 		}
 
 		let lastSemanticVersion =
@@ -57,7 +75,9 @@ public struct Parser {
 
 		return ReleaseNotes(
 			version: nextSemanticVersion,
-			conventionalCommits: conventionalCommits
+			bumpType: bumpType,
+			conventionalCommits: conventionalCommits,
+			hideCommitHashes: hideCommitHashes
 		)
 	}
 }

@@ -3,12 +3,25 @@ import Model
 
 /// Provides access to `git`.
 public struct GitClient {
+	public enum LogType {
+		case branch(String)
+		case tag(String?)
+	}
+
 	/// Returns the results of the `git log` command as an array of `GitCommit` that represent the
 	/// commits in a git repository.
 	/// - Parameter tag: An optional tag that, when provided, will run the `git log` command from
 	/// HEAD to that tag.
-	public func log(toTag tag: String?) -> [GitCommit] {
-		_log(tag)
+	public func commitsSinceBranch(targetBranch: String) -> [GitCommit] {
+		_log(.branch(targetBranch))
+	}
+
+	/// Returns the results of the `git log` command as an array of `GitCommit` that represent the
+	/// commits in a git repository.
+	/// - Parameter tag: An optional tag that, when provided, will run the `git log` command from
+	/// HEAD to that tag.
+	public func commitsSinceTag(_ tag: String?) -> [GitCommit] {
+		_log(.tag(tag))
 	}
 
 	/// Returns the results of the `git tag` command as an array of strings that represent the tags on a
@@ -17,7 +30,7 @@ public struct GitClient {
 		_tag()
 	}
 
-	var _log: (String?) -> [GitCommit] = { _ in [] }
+	var _log: (LogType) -> [GitCommit] = { _ in [] }
 	var _tag: () -> [String] = { [] }
 
 	/// Initializes a `GitClient`.
@@ -25,7 +38,7 @@ public struct GitClient {
 	///   - log: A closure that takes an optional `String` and returns an array of `GitCommit`.
 	///   - tag: A closure that returns an array of `String` representing git tags.
 	public init(
-		log: @escaping (String?) -> [GitCommit],
+		log: @escaping (LogType) -> [GitCommit],
 		tag: @escaping () -> [String]
 	) {
 		self._log = log

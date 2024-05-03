@@ -11,6 +11,7 @@ class ReleaseNotesTests: XCTestCase {
 			XCTAssertEqual(
 				ReleaseNotes(
 					version: SemanticVersion(major: 1, minor: 1, patch: 0),
+					bumpType: .minor,
 					conventionalCommits: [
 						try XCTUnwrap(
 							ConventionalCommit(
@@ -52,6 +53,7 @@ class ReleaseNotesTests: XCTestCase {
 			XCTAssertEqual(
 				ReleaseNotes(
 					version: SemanticVersion(major: 1, minor: 0, patch: 0),
+					bumpType: .major,
 					conventionalCommits: [
 						try XCTUnwrap(
 							ConventionalCommit(
@@ -83,6 +85,7 @@ class ReleaseNotesTests: XCTestCase {
 			XCTAssertEqual(
 				ReleaseNotes(
 					version: SemanticVersion(major: 1, minor: 0, patch: 0),
+					bumpType: .major,
 					conventionalCommits: [
 						try XCTUnwrap(
 							ConventionalCommit(
@@ -117,6 +120,7 @@ class ReleaseNotesTests: XCTestCase {
 			XCTAssertEqual(
 				ReleaseNotes(
 					version: SemanticVersion(major: 1, minor: 0, patch: 0),
+					bumpType: .none,
 					conventionalCommits: [
 						try XCTUnwrap(
 							ConventionalCommit(
@@ -154,7 +158,8 @@ class ReleaseNotesTests: XCTestCase {
 		} operation: {
 			XCTAssertEqual(
 				ReleaseNotes(
-					version: SemanticVersion(major: 1, minor: 0, patch: 0),
+					version: SemanticVersion(major: 1, minor: 0, patch: 1),
+					bumpType: .patch,
 					conventionalCommits: [
 						try XCTUnwrap(
 							ConventionalCommit(
@@ -170,7 +175,7 @@ class ReleaseNotesTests: XCTestCase {
 					]
 				).markdown,
 				"""
-				## [1.0.0] - 1970-01-01
+				## [1.0.1] - 1970-01-01
 
 				### Hotfixes
 				* Awesome hotfix (abcdef)
@@ -188,7 +193,8 @@ class ReleaseNotesTests: XCTestCase {
 		} operation: {
 			XCTAssertEqual(
 				ReleaseNotes(
-					version: SemanticVersion(major: 1, minor: 0, patch: 0),
+					version: SemanticVersion(major: 1, minor: 1, patch: 0),
+					bumpType: .minor,
 					conventionalCommits: [
 						try XCTUnwrap(
 							ConventionalCommit(
@@ -204,7 +210,7 @@ class ReleaseNotesTests: XCTestCase {
 					]
 				).markdown,
 				"""
-				## [1.0.0] - 1970-01-01
+				## [1.1.0] - 1970-01-01
 
 				### Bug Fixes
 				* Awesome bug fix (abcdef)
@@ -221,7 +227,8 @@ class ReleaseNotesTests: XCTestCase {
 			$0.date.now = Date(timeIntervalSince1970: 0)
 		} operation: {
 			let json = ReleaseNotes(
-				version: SemanticVersion(major: 1, minor: 0, patch: 0),
+				version: SemanticVersion(major: 1, minor: 1, patch: 0),
+				bumpType: .minor,
 				conventionalCommits: [
 					try XCTUnwrap(
 						ConventionalCommit(
@@ -240,9 +247,9 @@ class ReleaseNotesTests: XCTestCase {
 			).json
 			let expected = """
 				{
-				  "version" : "1.0.0",
-				  "containsBreakingChange" : false,
-				  "releaseNotes" : "## [1.0.0] - 1970-01-01\\n\\n### Features\\n* Awesome feature (abcdef)\\n\\n### Chores\\n* Change the \\\"total\\\" field (abcdef)"
+				  "bumpType" : "minor",
+				  "releaseNotes" : "## [1.1.0] - 1970-01-01\\n\\n### Features\\n* Awesome feature (abcdef)\\n\\n### Chores\\n* Change the \\\"total\\\" field (abcdef)",
+				  "version" : "1.1.0"
 				}
 				"""
 
@@ -257,7 +264,7 @@ class ReleaseNotesTests: XCTestCase {
 				String(
 					data: try JSONSerialization.data(
 						withJSONObject: jsonObject as Any,
-						options: [.prettyPrinted]
+						options: [.prettyPrinted, .sortedKeys]
 					),
 					encoding: .utf8
 				),

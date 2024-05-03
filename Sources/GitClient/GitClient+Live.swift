@@ -3,15 +3,29 @@ import Model
 
 extension GitClient {
 	/// No overview available.
-	public static let liveValue: GitClient = GitClient { tag in
-		let arguments = [
-			"--no-pager",
-			"log",
-			// swiftlint:disable:next force_unwrapping
-			tag == nil ? "" : "\(tag!)..HEAD",
-			"--no-merges",
-			"--pretty=\"%h \(GitCommit.ParsingConstants.fieldSeparator) %s \(GitCommit.ParsingConstants.fieldSeparator) %b \n-@-@-@-@-@-@-@-@\n\"",
-		]
+	public static let liveValue: GitClient = GitClient { logType in
+		let arguments: [String]
+		switch logType {
+		case let .branch(targetBranch):
+			arguments = [
+				"--no-pager",
+				"log",
+				"--all",
+				"--not \(targetBranch)",
+				"--no-merges",
+				"--pretty=\"%h \(GitCommit.ParsingConstants.fieldSeparator) %s \(GitCommit.ParsingConstants.fieldSeparator) %b \n-@-@-@-@-@-@-@-@\n\"",
+			]
+		case let .tag(tag):
+			arguments = [
+				"--no-pager",
+				"log",
+				// swiftlint:disable:next force_unwrapping
+				tag == nil ? "" : "\(tag!)..HEAD",
+				"--no-merges",
+				"--pretty=\"%h \(GitCommit.ParsingConstants.fieldSeparator) %s \(GitCommit.ParsingConstants.fieldSeparator) %b \n-@-@-@-@-@-@-@-@\n\"",
+			]
+		}
+
 		let log = shell(
 			command: "git",
 			arguments: arguments,
