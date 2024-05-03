@@ -5,6 +5,8 @@ rm -rf Tests/swift-conventional-commit-parserTests/Fixtures
 mkdir -p Tests/swift-conventional-commit-parserTests/Fixtures
 cd Tests/swift-conventional-commit-parserTests/Fixtures
 
+git config --global init.defaultBranch main
+
 mkdir -p GitRepoNoCommits
 cd GitRepoNoCommits
 git init
