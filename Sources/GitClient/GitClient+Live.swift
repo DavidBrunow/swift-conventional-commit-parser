@@ -28,9 +28,7 @@ extension GitClient {
 
 		let log = shell(
 			command: "git",
-			arguments: arguments,
-			environmentVariables: [:],
-			outputFile: nil
+			arguments: arguments
 		)
 
 		return log.components(separatedBy: "-@-@-@-@-@-@-@-@")
@@ -40,9 +38,7 @@ extension GitClient {
 	} tag: {
 		let tag = shell(
 			command: "git tag",
-			arguments: [],
-			environmentVariables: [:],
-			outputFile: nil
+			arguments: []
 		)
 
 		return tag.split(separator: "\n").map { String($0) }
@@ -51,25 +47,15 @@ extension GitClient {
 
 private func shell(
 	command: String,
-	arguments: [String],
-	environmentVariables: [String: String],
-	outputFile: String?
+	arguments: [String]
 ) -> String {
-	let scriptOutputFile: String
 
-	if let outputFile = outputFile {
-		scriptOutputFile = " > \(outputFile)"
-	} else {
-		scriptOutputFile = ""
-	}
-
-	let script = "\(command) \(arguments.joined(separator: " "))" + scriptOutputFile
+	let script = "\(command) \(arguments.joined(separator: " "))"
 
 	let task = Process()
 	task.launchPath = "/bin/sh"
 	task.arguments = ["-c", script]
-	task.environment = mergeEnvs(
-		localEnv: environmentVariables, processEnv: ProcessInfo.processInfo.environment)
+	task.environment = ProcessInfo.processInfo.environment
 	task.currentDirectoryPath = FileManager.default.currentDirectoryPath
 
 	let pipe = Pipe()
@@ -83,13 +69,6 @@ private func shell(
 	}
 
 	let data = pipe.fileHandleForReading.readDataToEndOfFile()
-	return (String(data: data, encoding: .utf8) ?? "").trimmingCharacters(
-		in: .whitespacesAndNewlines)
-}
-
-private func mergeEnvs(localEnv: [String: String], processEnv: [String: String]) -> [String: String]
-{
-	localEnv.merging(processEnv) { _, envString -> String in
-		envString
-	}
+	return (String(data: data, encoding: .utf8) ?? "")
+		.trimmingCharacters(in: .whitespacesAndNewlines)
 }
