@@ -37,7 +37,7 @@ extension GitClient {
 			.compactMap { GitCommit($0) }
 	} tag: {
 		let tag = shell(
-			command: "git tag",
+			command: "git describe --tags --abbrev=0",
 			arguments: []
 		)
 
@@ -49,7 +49,6 @@ private func shell(
 	command: String,
 	arguments: [String]
 ) -> String {
-
 	let script = "\(command) \(arguments.joined(separator: " "))"
 
 	let task = Process()
@@ -60,13 +59,10 @@ private func shell(
 
 	let pipe = Pipe()
 	task.standardOutput = pipe
+	let errorPipe = Pipe()
+	task.standardError = errorPipe
 
-	do {
-		try task.run()
-	} catch let error as NSError {
-		print(error.localizedDescription)
-		return ""
-	}
+	try? task.run()
 
 	let data = pipe.fileHandleForReading.readDataToEndOfFile()
 	return (String(data: data, encoding: .utf8) ?? "")

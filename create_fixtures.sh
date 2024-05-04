@@ -32,7 +32,7 @@ cd GitRepoChoreOnMainFeatOnBranchTaggedVersion1
 git init
 touch "AwesomeCodeForVersion1.swift"
 git add "AwesomeCodeForVersion1.swift"
-git commit -m "feat: Awesome code for version 1"
+git commit -m "feat!: Awesome code for version 1"
 git tag 1.0.0
 touch "README.md"
 git add "README.md"
@@ -62,7 +62,7 @@ cd GitRepoChoreOnMainNoFormattedCommitOnBranchTaggedVersion1
 git init
 touch "AnotherAwesomeCodeForVersion1.swift"
 git add "AnotherAwesomeCodeForVersion1.swift"
-git commit -m "feat: Awesome code for version 1"
+git commit -m "feat!: Awesome code for version 1"
 git tag 1.0.0
 touch "README.md"
 git add "README.md"
@@ -71,3 +71,47 @@ git checkout -b "feature/myAwesomeFeature"
 touch "AwesomeCodeWithoutFormattedCommitTaggedVersion1.swift"
 git add "AwesomeCodeWithoutFormattedCommitTaggedVersion1.swift"
 git commit -m "wip"
+
+cd ..
+mkdir -p GitRepoHotfixNoFormattedCommitOnBranch
+cd GitRepoHotfixNoFormattedCommitOnBranch
+git init
+touch "v1.md"
+git add "v1.md"
+git commit -m "feat!: v1"
+git tag 1.0.0
+touch "v2.md"
+git add "v2.md"
+git commit -m "feat!: v2"
+git tag 2.0.0
+git checkout -b release/1.1 1.0.0
+git checkout -b hotfix
+touch "hotfix.md"
+git add "hotfix.md"
+git commit -m "wip"
+
+cd ..
+mkdir -p GitRepoHotfixFormattedCommitOnBranch
+cd GitRepoHotfixFormattedCommitOnBranch
+git init
+touch "v1.md"
+git add "v1.md"
+git commit -m "feat!: v1"
+git tag 1.0.0
+touch "v1.1.md"
+git add "v1.1.md"
+git commit -m "feat: v1.1"
+git tag 1.1.0
+touch "v1.2.md"
+git add "v1.2.md"
+git commit -m "feat: v1.2"
+git tag 1.2.0
+touch "v2.md"
+git add "v2.md"
+git commit -m "feat!: v2"
+git tag 2.0.0
+git checkout -b release/1.1.1 1.1.0
+git checkout -b hotfix
+touch "hotfix.md"
+git add "hotfix.md"
+git commit -m "hotfix: Fix the thing!"

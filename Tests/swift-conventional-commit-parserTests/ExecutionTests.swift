@@ -174,8 +174,6 @@ final class ExecutionTests: XCTestCase {
 	func testPullRequest_NotGitRepo() throws {
 		guard #available(macOS 12, *) else { return }
 		let outputText = """
-			fatal: not a git repository (or any of the parent directories): .git
-			fatal: not a git repository (or any of the parent directories): .git
 			Error: No formatted commits
 			"""
 		try assertExecuteCommand(
@@ -188,9 +186,6 @@ final class ExecutionTests: XCTestCase {
 	func testPullRequest_NoCommits() throws {
 		guard #available(macOS 12, *) else { return }
 		let outputText = """
-			fatal: ambiguous argument 'main': unknown revision or path not in the working tree.
-			Use '--' to separate paths from revisions, like this:
-			'git <command> [<revision>...] -- [<file>...]'
 			Error: No formatted commits
 			"""
 		try assertExecuteCommand(
@@ -204,7 +199,6 @@ final class ExecutionTests: XCTestCase {
 	func testRelease_NoCommits() throws {
 		guard #available(macOS 12, *) else { return }
 		let outputText = """
-			fatal: your current branch 'main' does not have any commits yet
 			Error: No formatted commits
 			"""
 		try assertExecuteCommand(
@@ -228,7 +222,8 @@ final class ExecutionTests: XCTestCase {
 			command:
 				"swift-conventional-commit-parser pull-request -t main --hide-commit-hashes",
 			currentDirectoryPath: .fixturesPath.appending(
-				"/GitRepoChoreOnMainFeatOnBranch"),
+				"/GitRepoChoreOnMainFeatOnBranch"
+			),
 			expected: outputText
 		)
 	}
@@ -246,7 +241,8 @@ final class ExecutionTests: XCTestCase {
 			command:
 				"swift-conventional-commit-parser merge-request -t main --hide-commit-hashes",
 			currentDirectoryPath: .fixturesPath.appending(
-				"/GitRepoChoreOnMainFeatOnBranch"),
+				"/GitRepoChoreOnMainFeatOnBranch"
+			),
 			expected: outputText
 		)
 	}
@@ -264,7 +260,27 @@ final class ExecutionTests: XCTestCase {
 			command:
 				"swift-conventional-commit-parser pull-request -t main --hide-commit-hashes",
 			currentDirectoryPath: .fixturesPath.appending(
-				"/GitRepoChoreOnMainFeatOnBranchTaggedVersion1"),
+				"/GitRepoChoreOnMainFeatOnBranchTaggedVersion1"
+			),
+			expected: outputText
+		)
+	}
+
+	func testPullRequest_ReleaseBranch_HotfixOnBranch_TaggedVersion2() throws {
+		guard #available(macOS 12, *) else { return }
+		let outputText = """
+			{
+			  "bumpType" : "patch",
+			  "releaseNotes" : "## [1.1.1] - \(DateFormatter.releaseNotes.string(from: Date()))\\n\\n### Hotfixes\\n* Fix the thing!",
+			  "version" : "1.1.1"
+			}
+			"""
+		try assertExecuteCommand(
+			command:
+				"swift-conventional-commit-parser pull-request -t \"release/1.1.1\" --hide-commit-hashes",
+			currentDirectoryPath: .fixturesPath.appending(
+				"/GitRepoHotfixFormattedCommitOnBranch"
+			),
 			expected: outputText
 		)
 	}
@@ -279,7 +295,8 @@ final class ExecutionTests: XCTestCase {
 		try assertExecuteCommand(
 			command: "swift-conventional-commit-parser pull-request -t main",
 			currentDirectoryPath: .fixturesPath.appending(
-				"/GitRepoChoreOnMainNoFormattedCommitOnBranch"),
+				"/GitRepoChoreOnMainNoFormattedCommitOnBranch"
+			),
 			expected: outputText,
 			exitCode: .failure
 		)
@@ -294,6 +311,20 @@ final class ExecutionTests: XCTestCase {
 			command: "swift-conventional-commit-parser pull-request -t main",
 			currentDirectoryPath: .fixturesPath.appending(
 				"/GitRepoChoreOnMainNoFormattedCommitOnBranchTaggedVersion1"),
+			expected: outputText,
+			exitCode: .failure
+		)
+	}
+
+	func testPullRequest_Hotfix_NoFormattedCommitOnBranch() throws {
+		guard #available(macOS 12, *) else { return }
+		let outputText = """
+			Error: No formatted commits
+			"""
+		try assertExecuteCommand(
+			command: "swift-conventional-commit-parser pull-request -t \"release/1.1\"",
+			currentDirectoryPath: .fixturesPath.appending(
+				"/GitRepoHotfixNoFormattedCommitOnBranch"),
 			expected: outputText,
 			exitCode: .failure
 		)
@@ -486,5 +517,6 @@ private func assertEqualStrings(
 	XCTFail(
 		"Actual output does not match the expected output:\n\(stringComparison)",
 		file: file,
-		line: line)
+		line: line
+	)
 }
