@@ -2,3 +2,4 @@
 .DS_Store
 xcuserdata
 /swift-conventional-commit-parser
+Tests/swift-conventional-commit-parserTests/Fixtures

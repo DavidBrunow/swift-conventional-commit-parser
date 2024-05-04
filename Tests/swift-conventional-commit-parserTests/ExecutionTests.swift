@@ -2,6 +2,7 @@ import ArgumentParser
 import XCTest
 
 final class ExecutionTests: XCTestCase {
+	/// No overview available.
 	override func setUp() {
 		super.setUp()
 
@@ -250,7 +251,25 @@ final class ExecutionTests: XCTestCase {
 		)
 	}
 
-	// TODO: integration test where we test commits, but maybe just by length of response? Need something.
+	func testPullRequest_ChoreOnMain_FeatOnBranch_TaggedVersion1() throws {
+		guard #available(macOS 12, *) else { return }
+		let outputText = """
+			{
+			  "bumpType" : "minor",
+			  "releaseNotes" : "## [1.1.0] - \(DateFormatter.releaseNotes.string(from: Date()))\\n\\n### Features\\n* My awesome feature\\n\\n### Chores\\n* Add README.md",
+			  "version" : "1.1.0"
+			}
+			"""
+		try assertExecuteCommand(
+			command:
+				"swift-conventional-commit-parser pull-request -t main --hide-commit-hashes",
+			currentDirectoryPath: .fixturesPath.appending(
+				"/GitRepoChoreOnMainFeatOnBranchTaggedVersion1"),
+			expected: outputText
+		)
+	}
+
+	// TODO: integration test where we test commit hashess, but maybe just by length of response? Need something.
 
 	func testPullRequest_ChoreOnMain_NoFormattedCommitOnBranch() throws {
 		guard #available(macOS 12, *) else { return }
@@ -265,12 +284,27 @@ final class ExecutionTests: XCTestCase {
 			exitCode: .failure
 		)
 	}
+
+	func testPullRequest_ChoreOnMain_NoFormattedCommitOnBranch_TaggedVersion1() throws {
+		guard #available(macOS 12, *) else { return }
+		let outputText = """
+			Error: No formatted commits
+			"""
+		try assertExecuteCommand(
+			command: "swift-conventional-commit-parser pull-request -t main",
+			currentDirectoryPath: .fixturesPath.appending(
+				"/GitRepoChoreOnMainNoFormattedCommitOnBranchTaggedVersion1"),
+			expected: outputText,
+			exitCode: .failure
+		)
+	}
 }
 
 extension DateFormatter {
 	fileprivate static var releaseNotes: DateFormatter {
 		let formatter = DateFormatter()
 		formatter.dateFormat = "yyyy-MM-dd"
+		formatter.timeZone = TimeZone(secondsFromGMT: 0)
 		return formatter
 	}
 }
