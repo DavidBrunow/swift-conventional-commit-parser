@@ -95,7 +95,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "pull-request"
+            argument = "pull-request -t main"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

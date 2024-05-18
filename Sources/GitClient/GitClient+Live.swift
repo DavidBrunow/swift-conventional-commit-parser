@@ -10,8 +10,9 @@ extension GitClient {
 			arguments = [
 				"--no-pager",
 				"log",
-				"--all",
-				"--not \(targetBranch)",
+				"\(targetBranch)..",
+//				"--all",
+//				"--not \(targetBranch)",
 				"--no-merges",
 				"--pretty=\"%h \(GitCommit.ParsingConstants.fieldSeparator) %s \(GitCommit.ParsingConstants.fieldSeparator) %b \n-@-@-@-@-@-@-@-@\n\"",
 			]
