@@ -62,9 +62,9 @@ recommend using them:
 With these problems in mind, I try to keep everything else simple. I only use
 these types:
 
-* `feat` / `feat!`: For code additions unrelated to bugs and breaking changes
+* `feat` / `feat!`: For code additions unrelated to bugs, and breaking changes
 for the same.
-* `fix` / `fix!`: For changes related to bugs and breaking changes related to
+* `fix` / `fix!`: For changes related to bugs, and breaking changes related to
 bugs.
 * `hotfix`: For rare situations where I'm making tiny fixes that need to be
 squeezed between minor versions.
