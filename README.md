@@ -8,7 +8,7 @@ enabling automation of the release process.
 Swift Conventional Commit Parser is meant to be used in two different parts of
 your CI tooling.
 
-1. On pull request CI, so that the release notes can be shown on the pull request
+1. On pull request CI so that the release notes can be shown on the pull request
 as a comment, which I prefer to do using [Danger Swift](https://github.com/danger/swift).
 Showing the release notes on the pull request allows the author and any
 reviewers to ensure that the release notes match their expectations. This also
