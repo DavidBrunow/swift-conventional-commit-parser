@@ -8,7 +8,7 @@ enabling automation of the release process.
 Swift Conventional Commit Parser is meant to be used in two different parts of
 your CI tooling.
 
-1. On pull request CI, so that the release notes can be shown on the pull request
+1. On pull request CI so that the release notes can be shown on the pull request
 as a comment, which I prefer to do using [Danger Swift](https://github.com/danger/swift).
 Showing the release notes on the pull request allows the author and any
 reviewers to ensure that the release notes match their expectations. This also
@@ -62,9 +62,9 @@ recommend using them:
 With these problems in mind, I try to keep everything else simple. I only use
 these types:
 
-* `feat` / `feat!`: For code additions unrelated to bugs and breaking changes
+* `feat` / `feat!`: For code additions unrelated to bugs, and breaking changes
 for the same.
-* `fix` / `fix!`: For changes related to bugs and breaking changes related to
+* `fix` / `fix!`: For changes related to bugs, and breaking changes related to
 bugs.
 * `hotfix`: For rare situations where I'm making tiny fixes that need to be
 squeezed between minor versions.
