@@ -8,3 +8,4 @@ jobs:
     uses: DavidBrunow/CI-Tooling/.github/workflows/macos-tools-release-action.yml@apple
     permissions:
       contents: write
+    secrets: inherit
