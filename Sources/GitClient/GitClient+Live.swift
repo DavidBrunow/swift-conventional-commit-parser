@@ -4,6 +4,10 @@ import Model
 extension GitClient {
 	/// No overview available.
 	public static let liveValue: GitClient = GitClient { logType in
+		// Check if we're in a git repository
+		guard FileManager.default.fileExists(atPath: ".git") else {
+			throw GitError.repositoryNotFound
+		}
 		let arguments: [String]
 		switch logType {
 		case let .branch(targetBranch):
@@ -25,29 +29,42 @@ extension GitClient {
 			]
 		}
 
-		let log = shell(
+		let (output, exitCode) = shell(
 			command: "git",
 			arguments: arguments
 		)
+		
+		guard exitCode == 0 else {
+			throw GitError.gitCommandFailed("git \(arguments.joined(separator: " "))", exitCode: exitCode)
+		}
 
-		return log.components(separatedBy: "-@-@-@-@-@-@-@-@")
+		return output.components(separatedBy: "-@-@-@-@-@-@-@-@")
 			.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
 			.filter { $0.isEmpty == false }
 			.compactMap { GitCommit($0) }
 	} tag: {
-		let tag = shell(
+		// Check if we're in a git repository
+		guard FileManager.default.fileExists(atPath: ".git") else {
+			throw GitError.repositoryNotFound
+		}
+		
+		let (output, exitCode) = shell(
 			command: "git tag --merged",
 			arguments: []
 		)
+		
+		guard exitCode == 0 else {
+			throw GitError.gitCommandFailed("git tag --merged", exitCode: exitCode)
+		}
 
-		return tag.split(separator: "\n").map { String($0) }
+		return output.split(separator: "\n").map { String($0) }
 	}
 }
 
 private func shell(
 	command: String,
 	arguments: [String]
-) -> String {
+) -> (output: String, exitCode: Int) {
 	let script = "\(command) \(arguments.joined(separator: " "))"
 
 	let task = Process()
@@ -62,8 +79,11 @@ private func shell(
 	task.standardError = errorPipe
 
 	try? task.run()
+	task.waitUntilExit()
 
 	let data = pipe.fileHandleForReading.readDataToEndOfFile()
-	return (String(data: data, encoding: .utf8) ?? "")
+	let output = (String(data: data, encoding: .utf8) ?? "")
 		.trimmingCharacters(in: .whitespacesAndNewlines)
+	
+	return (output: output, exitCode: Int(task.terminationStatus))
 }
