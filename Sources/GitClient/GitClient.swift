@@ -10,8 +10,7 @@ public struct GitClient {
 
 	/// Returns the results of the `git log` command as an array of `GitCommit` that represent the
 	/// commits in a git repository.
-	/// - Parameter tag: An optional tag that, when provided, will run the `git log` command from
-	/// HEAD to that tag.
+	/// - Parameter targetBranch: The target branch to compare against.
 	public func commitsSinceBranch(targetBranch: String) -> [GitCommit] {
 		_log(.branch(targetBranch))
 	}
@@ -35,7 +34,7 @@ public struct GitClient {
 
 	/// Initializes a `GitClient`.
 	/// - Parameters:
-	///   - log: A closure that takes an optional `String` and returns an array of `GitCommit`.
+	///   - log: A closure that takes a LogType and returns an array of `GitCommit`.
 	///   - tag: A closure that returns an array of `String` representing git tags.
 	public init(
 		log: @escaping (LogType) -> [GitCommit],
