@@ -201,6 +201,7 @@ final class ExecutionTests: XCTestCase {
 		guard #available(macOS 12, *) else { return }
 		let outputText = """
 			Error: No formatted commits
+			Suggestion: Ensure at least one commit follows conventional commit format
 			"""
 		try assertExecuteCommand(
 			command: "swift-conventional-commit-parser release",

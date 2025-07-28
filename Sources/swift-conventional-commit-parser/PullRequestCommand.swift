@@ -1,6 +1,8 @@
 import ArgumentParser
 import Dependencies
+import Foundation
 import GitClient
+import Model
 import SwiftConventionalCommitParser
 
 struct PullRequestCommand: AsyncParsableCommand {
@@ -56,20 +58,33 @@ struct PullRequestCommand: AsyncParsableCommand {
 	var strict = false
 
 	func run() async throws {
-		try withDependencies {
-			$0[GitClient.self] = .liveValue
-		} operation: {
-			@Dependency(GitClient.self) var gitClient
+		do {
+			try withDependencies {
+				$0[GitClient.self] = .liveValue
+			} operation: {
+				@Dependency(GitClient.self) var gitClient
 
-			let releaseNotes = try Parser.releaseNotes(
-				gitClient: gitClient,
-				targetBranch: targetBranch,
-				hideCommitHashes: hideCommitHashes,
-				strictInterpretationOfConventionalCommits: strict,
-				noFormattedCommitsErrorMessage: noFormattedCommitsErrorMessage
-			)
+				let releaseNotes = try Parser.releaseNotes(
+					gitClient: gitClient,
+					targetBranch: targetBranch,
+					hideCommitHashes: hideCommitHashes,
+					strictInterpretationOfConventionalCommits: strict,
+					noFormattedCommitsErrorMessage:
+						noFormattedCommitsErrorMessage
+				)
 
-			print("\(releaseNotes.json)")
+				print("\(releaseNotes.json)")
+			}
+		} catch let error as ActionableError {
+			fputs("Error: \(error.localizedDescription)\n", stderr)
+			// Only add suggestions for basic error messages that lack guidance
+			if let suggestion = error.recoverySuggestion,
+				!error.localizedDescription.contains("Learn more")
+					&& !error.localizedDescription.contains("http")
+			{
+				fputs("Suggestion: \(suggestion)\n", stderr)
+			}
+			throw ExitCode.failure
 		}
 	}
 }

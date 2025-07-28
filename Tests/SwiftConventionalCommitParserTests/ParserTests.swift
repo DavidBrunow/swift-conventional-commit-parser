@@ -7,9 +7,9 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionNoTagsNoLogs() throws {
 		XCTAssertThrowsError(
 			try Parser.releaseNotes(
-				gitClient: GitClient { _ in
+				gitClient: GitClient { _ throws in
 					[]
-				} tag: {
+				} tag: { () throws in
 					[]
 				},
 				strictInterpretationOfConventionalCommits: false
@@ -24,9 +24,9 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionNoTagsNoLogsStrict() throws {
 		XCTAssertThrowsError(
 			try Parser.releaseNotes(
-				gitClient: GitClient { _ in
+				gitClient: GitClient { _ throws in
 					[]
-				} tag: {
+				} tag: { () throws in
 					[]
 				},
 				strictInterpretationOfConventionalCommits: true
@@ -41,9 +41,9 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionNoTagsNoLogsPullRequest() throws {
 		XCTAssertThrowsError(
 			try Parser.releaseNotes(
-				gitClient: GitClient { _ in
+				gitClient: GitClient { _ throws in
 					[]
-				} tag: {
+				} tag: { () throws in
 					[]
 				},
 				targetBranch: "main",
@@ -59,9 +59,9 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionNoTagsNoLogsStrictPullRequest() throws {
 		XCTAssertThrowsError(
 			try Parser.releaseNotes(
-				gitClient: GitClient { _ in
+				gitClient: GitClient { _ throws in
 					[]
-				} tag: {
+				} tag: { () throws in
 					[]
 				},
 				targetBranch: "main",
@@ -77,7 +77,7 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionNoTagsNoLogsOnBranchPullRequest() throws {
 		XCTAssertThrowsError(
 			try Parser.releaseNotes(
-				gitClient: GitClient { logType in
+				gitClient: GitClient { logType throws in
 					switch logType {
 					case .branch:
 						return []
@@ -86,7 +86,7 @@ class ParserTests: XCTestCase {
 							.mockAwesomeChore
 						]
 					}
-				} tag: {
+				} tag: { () throws in
 					[]
 				},
 				targetBranch: "main",
@@ -102,7 +102,7 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionNoTagsNoLogsOnBranchStrictPullRequest() throws {
 		XCTAssertThrowsError(
 			try Parser.releaseNotes(
-				gitClient: GitClient { logType in
+				gitClient: GitClient { logType throws in
 					switch logType {
 					case .branch:
 						return []
@@ -111,7 +111,7 @@ class ParserTests: XCTestCase {
 							.mockAwesomeChore
 						]
 					}
-				} tag: {
+				} tag: { () throws in
 					[]
 				},
 				targetBranch: "main",
@@ -127,11 +127,11 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionNoTagsSingleFeatCommit() throws {
 		XCTAssertEqual(
 			try Parser.releaseNotes(
-				gitClient: GitClient { _ in
+				gitClient: GitClient { _ throws in
 					[
 						.mockAwesomeFeature
 					]
-				} tag: {
+				} tag: { () throws in
 					[]
 				},
 				strictInterpretationOfConventionalCommits: false
@@ -143,11 +143,11 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionNoTagsSingleFeatCommitStrict() throws {
 		XCTAssertEqual(
 			try Parser.releaseNotes(
-				gitClient: GitClient { _ in
+				gitClient: GitClient { _ throws in
 					[
 						.mockAwesomeFeature
 					]
-				} tag: {
+				} tag: { () throws in
 					[]
 				},
 				strictInterpretationOfConventionalCommits: true
@@ -159,11 +159,11 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionNoTagsSingleFeatCommitPullRequest() throws {
 		XCTAssertEqual(
 			try Parser.releaseNotes(
-				gitClient: GitClient { _ in
+				gitClient: GitClient { _ throws in
 					[
 						.mockAwesomeFeature
 					]
-				} tag: {
+				} tag: { () throws in
 					[]
 				},
 				targetBranch: "main",
@@ -176,11 +176,11 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionNoTagsSingleFeatCommitStrictPullRequest() throws {
 		XCTAssertEqual(
 			try Parser.releaseNotes(
-				gitClient: GitClient { _ in
+				gitClient: GitClient { _ throws in
 					[
 						.mockAwesomeFeature
 					]
-				} tag: {
+				} tag: { () throws in
 					[]
 				},
 				targetBranch: "main",
@@ -193,11 +193,11 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionNoTagsSingleFixCommit() throws {
 		XCTAssertEqual(
 			try Parser.releaseNotes(
-				gitClient: GitClient { _ in
+				gitClient: GitClient { _ throws in
 					[
 						.mockAwesomeBugfix
 					]
-				} tag: {
+				} tag: { () throws in
 					[]
 				},
 				strictInterpretationOfConventionalCommits: false
@@ -209,11 +209,11 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionNoTagsSingleFixCommitStrict() throws {
 		XCTAssertEqual(
 			try Parser.releaseNotes(
-				gitClient: GitClient { _ in
+				gitClient: GitClient { _ throws in
 					[
 						.mockAwesomeBugfix
 					]
-				} tag: {
+				} tag: { () throws in
 					[]
 				},
 				strictInterpretationOfConventionalCommits: true
@@ -225,11 +225,11 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionNoTagsSingleHotfixCommit() throws {
 		XCTAssertEqual(
 			try Parser.releaseNotes(
-				gitClient: GitClient { _ in
+				gitClient: GitClient { _ throws in
 					[
 						.mockAwesomeHotfix
 					]
-				} tag: {
+				} tag: { () throws in
 					[]
 				},
 				strictInterpretationOfConventionalCommits: false
@@ -241,11 +241,11 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionNoTagsSingleHotfixCommitStrict() throws {
 		XCTAssertEqual(
 			try Parser.releaseNotes(
-				gitClient: GitClient { _ in
+				gitClient: GitClient { _ throws in
 					[
 						.mockAwesomeHotfix
 					]
-				} tag: {
+				} tag: { () throws in
 					[]
 				},
 				strictInterpretationOfConventionalCommits: true
@@ -257,11 +257,11 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionNoTagsSingleFeatBreakingChangeCommit() throws {
 		XCTAssertEqual(
 			try Parser.releaseNotes(
-				gitClient: GitClient { _ in
+				gitClient: GitClient { _ throws in
 					[
 						.mockAwesomeFeatureBreakingChange
 					]
-				} tag: {
+				} tag: { () throws in
 					[]
 				},
 				strictInterpretationOfConventionalCommits: false
@@ -273,11 +273,11 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionNoTagsSingleFeatBreakingChangeCommitStrict() throws {
 		XCTAssertEqual(
 			try Parser.releaseNotes(
-				gitClient: GitClient { _ in
+				gitClient: GitClient { _ throws in
 					[
 						.mockAwesomeFeatureBreakingChange
 					]
-				} tag: {
+				} tag: { () throws in
 					[]
 				},
 				strictInterpretationOfConventionalCommits: true
@@ -289,11 +289,11 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionNoTagsSingleFixBreakingChangeCommit() throws {
 		XCTAssertEqual(
 			try Parser.releaseNotes(
-				gitClient: GitClient { _ in
+				gitClient: GitClient { _ throws in
 					[
 						.mockAwesomeBugfixBreakingChange
 					]
-				} tag: {
+				} tag: { () throws in
 					[]
 				},
 				strictInterpretationOfConventionalCommits: false
@@ -305,11 +305,11 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionNoTagsSingleFixBreakingChangeCommitStrict() throws {
 		XCTAssertEqual(
 			try Parser.releaseNotes(
-				gitClient: GitClient { _ in
+				gitClient: GitClient { _ throws in
 					[
 						.mockAwesomeBugfixBreakingChange
 					]
-				} tag: {
+				} tag: { () throws in
 					[]
 				},
 				strictInterpretationOfConventionalCommits: true
@@ -321,13 +321,13 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionNoTagsSingleHotfixBreakingChangeCommit() throws {
 		XCTAssertEqual(
 			try Parser.releaseNotes(
-				gitClient: GitClient { _ in
+				gitClient: GitClient { _ throws in
 					[
 						GitCommit(
 							hash: "abcdef",
 							subject: "hotfix!: My bugfix")
 					]
-				} tag: {
+				} tag: { () throws in
 					[]
 				},
 				strictInterpretationOfConventionalCommits: false
@@ -339,13 +339,13 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionNoTagsSingleHotfixBreakingChangeCommitStrict() throws {
 		XCTAssertEqual(
 			try Parser.releaseNotes(
-				gitClient: GitClient { _ in
+				gitClient: GitClient { _ throws in
 					[
 						GitCommit(
 							hash: "abcdef",
 							subject: "hotfix!: My bugfix")
 					]
-				} tag: {
+				} tag: { () throws in
 					[]
 				},
 				strictInterpretationOfConventionalCommits: false
@@ -357,14 +357,14 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionNoTagsBreakingChangeMultipleCommits() throws {
 		XCTAssertEqual(
 			try Parser.releaseNotes(
-				gitClient: GitClient { _ in
+				gitClient: GitClient { _ throws in
 					[
 						.mockAwesomeBugfixBreakingChange,
 						.mockAwesomeChore,
 						.mockAwesomeFeature,
 						.mockAwesomeHotfix,
 					]
-				} tag: {
+				} tag: { () throws in
 					[]
 				},
 				strictInterpretationOfConventionalCommits: false
@@ -376,14 +376,14 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionNoTagsBreakingChangeMultipleCommitsStrict() throws {
 		XCTAssertEqual(
 			try Parser.releaseNotes(
-				gitClient: GitClient { _ in
+				gitClient: GitClient { _ throws in
 					[
 						.mockAwesomeBugfixBreakingChange,
 						.mockAwesomeChore,
 						.mockAwesomeFeature,
 						.mockAwesomeHotfix,
 					]
-				} tag: {
+				} tag: { () throws in
 					[]
 				},
 				strictInterpretationOfConventionalCommits: true
@@ -395,13 +395,13 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionNoTagsFeatMultipleCommits() throws {
 		XCTAssertEqual(
 			try Parser.releaseNotes(
-				gitClient: GitClient { _ in
+				gitClient: GitClient { _ throws in
 					[
 						.mockAwesomeChore,
 						.mockAwesomeFeature,
 						.mockAwesomeHotfix,
 					]
-				} tag: {
+				} tag: { () throws in
 					[]
 				},
 				strictInterpretationOfConventionalCommits: false
@@ -413,13 +413,13 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionNoTagsFeatMultipleCommitsStrict() throws {
 		XCTAssertEqual(
 			try Parser.releaseNotes(
-				gitClient: GitClient { _ in
+				gitClient: GitClient { _ throws in
 					[
 						.mockAwesomeChore,
 						.mockAwesomeFeature,
 						.mockAwesomeHotfix,
 					]
-				} tag: {
+				} tag: { () throws in
 					[]
 				},
 				strictInterpretationOfConventionalCommits: true
@@ -431,13 +431,13 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionNoTagsFixMultipleCommits() throws {
 		XCTAssertEqual(
 			try Parser.releaseNotes(
-				gitClient: GitClient { _ in
+				gitClient: GitClient { _ throws in
 					[
 						.mockAwesomeChore,
 						.mockAwesomeBugfix,
 						.mockAwesomeHotfix,
 					]
-				} tag: {
+				} tag: { () throws in
 					[]
 				},
 				strictInterpretationOfConventionalCommits: false
@@ -449,13 +449,13 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionNoTagsFixMultipleCommitsStrict() throws {
 		XCTAssertEqual(
 			try Parser.releaseNotes(
-				gitClient: GitClient { _ in
+				gitClient: GitClient { _ throws in
 					[
 						.mockAwesomeChore,
 						.mockAwesomeBugfix,
 						.mockAwesomeHotfix,
 					]
-				} tag: {
+				} tag: { () throws in
 					[]
 				},
 				strictInterpretationOfConventionalCommits: true
@@ -467,13 +467,13 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionNoTagsHotfixMultipleCommits() throws {
 		XCTAssertEqual(
 			try Parser.releaseNotes(
-				gitClient: GitClient { _ in
+				gitClient: GitClient { _ throws in
 					[
 						.mockAwesomeChore,
 						.mockAwesomeHotfix,
 						.mockAwesomeHotfix,
 					]
-				} tag: {
+				} tag: { () throws in
 					[]
 				},
 				strictInterpretationOfConventionalCommits: false
@@ -485,13 +485,13 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionNoTagsHotfixMultipleCommitsStrict() throws {
 		XCTAssertEqual(
 			try Parser.releaseNotes(
-				gitClient: GitClient { _ in
+				gitClient: GitClient { _ throws in
 					[
 						.mockAwesomeChore,
 						.mockAwesomeHotfix,
 						.mockAwesomeHotfix,
 					]
-				} tag: {
+				} tag: { () throws in
 					[]
 				},
 				strictInterpretationOfConventionalCommits: true
@@ -503,12 +503,12 @@ class ParserTests: XCTestCase {
 	func testParseNextVersionWithTags() throws {
 		XCTAssertEqual(
 			try Parser.releaseNotes(
-				gitClient: GitClient { _ in
+				gitClient: GitClient { _ throws in
 					[
 						.mockAwesomeChore,
 						.mockAwesomeBugfix,
 					]
-				} tag: {
+				} tag: { () throws in
 					[
 						"1.0.0",
 						"1.2.0",

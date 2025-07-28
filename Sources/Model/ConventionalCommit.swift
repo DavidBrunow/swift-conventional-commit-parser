@@ -99,6 +99,10 @@ public struct ConventionalCommit: Equatable {
 
 		let typeWithoutScope = type.replacingOccurrences(of: scope ?? "", with: "")
 
+		guard !typeWithoutScope.isEmpty else {
+			return nil
+		}
+
 		switch typeWithoutScope {
 		case "feat":
 			self.type = .known(.feat)
@@ -124,9 +128,15 @@ public struct ConventionalCommit: Equatable {
 			self.isBreaking = false
 		}
 
-		self.description = String(
+		let description = String(
 			commit.subject.suffix(from: commit.subject.index(after: colonIndex))
 		).trimmingCharacters(in: .whitespacesAndNewlines)
+
+		guard !description.isEmpty else {
+			return nil
+		}
+
+		self.description = description
 		self.hash = commit.hash
 		self.scope = scope?
 			.replacingOccurrences(of: "(", with: "")

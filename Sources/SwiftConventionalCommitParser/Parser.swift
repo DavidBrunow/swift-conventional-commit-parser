@@ -16,32 +16,32 @@ public struct Parser {
 		strictInterpretationOfConventionalCommits: Bool,
 		noFormattedCommitsErrorMessage: String = "No formatted commits"
 	) throws -> ReleaseNotes {
-		let tags = gitClient.tag()
+		let tags = try gitClient.tag()
 
 		let semanticVersions = tags.compactMap { SemanticVersion(tag: $0) }.sorted {
 			$0 < $1
 		}
 
 		if let targetBranch {
-			let commitsSinceLastBranch = gitClient.commitsSinceBranch(
+			let commitsSinceLastBranch = try gitClient.commitsSinceBranch(
 				targetBranch: targetBranch)
 			let conventionalCommitsSinceLastBranch = commitsSinceLastBranch.compactMap {
 				ConventionalCommit(commit: $0)
 			}
 			//      print("Conventional commits since last branch: \(conventionalCommitsSinceLastBranch)")
 			if conventionalCommitsSinceLastBranch.count == 0 {
-				throw ParserError.noFormattedCommits(noFormattedCommitsErrorMessage)
+				throw ParseError.noFormattedCommits(noFormattedCommitsErrorMessage)
 			}
 		}
 
-		let commitsSinceLastTag = gitClient.commitsSinceTag(semanticVersions.last?.tag)
+		let commitsSinceLastTag = try gitClient.commitsSinceTag(semanticVersions.last?.tag)
 
 		let conventionalCommits = commitsSinceLastTag.compactMap {
 			ConventionalCommit(commit: $0)
 		}
 
 		guard conventionalCommits.count > 0 else {
-			throw ParserError.noFormattedCommits(noFormattedCommitsErrorMessage)
+			throw ParseError.noFormattedCommits(noFormattedCommitsErrorMessage)
 		}
 
 		let lastSemanticVersion =
@@ -68,7 +68,7 @@ public struct Parser {
 		} else if conventionalCommits.isEmpty == false {
 			bumpType = .none
 		} else {
-			throw ParserError.noFormattedCommits(noFormattedCommitsErrorMessage)
+			throw ParseError.noFormattedCommits(noFormattedCommitsErrorMessage)
 		}
 
 		let nextSemanticVersion = lastSemanticVersion.bump(bumpType)
@@ -79,17 +79,5 @@ public struct Parser {
 			conventionalCommits: conventionalCommits,
 			hideCommitHashes: hideCommitHashes
 		)
-	}
-}
-
-public enum ParserError: LocalizedError {
-	case noFormattedCommits(String)
-
-	/// No overview available.
-	public var errorDescription: String? {
-		switch self {
-		case let .noFormattedCommits(errorMessage):
-			return errorMessage
-		}
 	}
 }
