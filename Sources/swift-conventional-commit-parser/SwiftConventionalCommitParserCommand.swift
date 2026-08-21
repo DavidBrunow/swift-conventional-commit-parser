@@ -17,7 +17,7 @@ struct SwiftConventionalCommitParserCommand: AsyncParsableCommand {
 			- [Swift Format](https://github.com/apple/swift-format)
 			- [SwiftLint](https://github.com/realm/SwiftLint)
 			""",
-		version: "0.1.0",
+		version: "0.2.0",
 		subcommands: [
 			MergeRequestCommand.self,
 			PullRequestCommand.self,
