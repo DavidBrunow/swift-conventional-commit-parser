@@ -69,8 +69,13 @@ public struct ReleaseNotes {
 		dateFormatter.dateFormat = "yyyy-MM-dd"
 		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
 
+		let firstLine =
+			bumpType == .none
+			? "No new release needed. These items will be part of the next release:\n"
+			: "## [\(version.tag)] - \(dateFormatter.string(from: date))\n"
+
 		return """
-			## [\(version.tag)] - \(dateFormatter.string(from: date))\n
+			\(firstLine)
 			\(notes.joined(separator: "\n\n").replacingOccurrences(of: "\"", with: "\\\""))
 			"""
 	}
