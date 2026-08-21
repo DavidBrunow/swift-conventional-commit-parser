@@ -140,7 +140,7 @@ class ReleaseNotesTests: XCTestCase {
 					]
 				).markdown,
 				"""
-				## [1.0.0] - 1970-01-01
+				No new release needed. These items will be part of the next release:
 
 				### Chores
 				* Awesome chore (abcdef)
